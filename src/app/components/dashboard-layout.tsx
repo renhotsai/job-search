@@ -24,7 +24,6 @@ const DashboardLayout = async ({children}: Props) => {
 			<SidebarProvider>
 				<AppSidebar/>
 				<main>
-					<SidebarTrigger/>
 					{children}
 				</main>
 			</SidebarProvider>

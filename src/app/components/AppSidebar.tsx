@@ -8,7 +8,7 @@ import {
 	SidebarGroupLabel,
 	SidebarMenu,
 	SidebarMenuButton,
-	SidebarMenuItem,
+	SidebarMenuItem, SidebarTrigger,
 } from "@/components/ui/sidebar"
 
 // Menu items.
@@ -47,12 +47,12 @@ const items = [
 
 export function AppSidebar() {
 	return (
-		<Sidebar>
+		<Sidebar className={'inset-y-auto'} collapsible={"icon"}>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Job Search</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
+							<SidebarTrigger />
 							{items.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild>
