@@ -1,7 +1,7 @@
 const User = ()=>{
 	return(
-		<div>
-			<h1>user</h1>
+		<div className={'bg-red-600 w-full h-full'}>
+			this is user page
 		</div>
 	)
 }

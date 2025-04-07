@@ -32,7 +32,7 @@ export default function RootLayout ({
 		<>
 			<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen`}
 			>
 			<ThemeProvider
 				attribute="class"
@@ -40,7 +40,6 @@ export default function RootLayout ({
 				enableSystem
 				disableTransitionOnChange
 			>
-				<Header />
 				<DashboardLayout>
 					{children}
 				</DashboardLayout>

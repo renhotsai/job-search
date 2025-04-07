@@ -13,11 +13,16 @@ async function signInWithGithub () {
 		},
 	})
 
-	console.log(`data: ${JSON.stringify(data)}`)
-	console.log(`error: ${JSON.stringify(error)}`)
 	if (data.url) {
 		redirect(data.url) // use the redirect API for your server framework
 	}
 }
 
-export { signInWithGithub }
+
+const logout = async () => {
+	const supabase = await createClient()
+	await supabase.auth.signOut()
+	redirect('/')
+}
+
+export { signInWithGithub, logout }

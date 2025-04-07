@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/components/AppSidebar";
 import { createClient } from "@/lib/supabase/server";
+import Header from "@/app/components/header";
 
 
 type Props = {
@@ -9,23 +10,28 @@ type Props = {
 
 const DashboardLayout = async ({children}: Props) => {
 	const supabase = await createClient();
-	const {data:{user}} = await supabase.auth.getUser();
-	console.log(`user: ${user}`)
+	const {data: {user}} = await supabase.auth.getUser();
 	if (!user) {
 		return (
-			<main>
-				{children}
-			</main>
+			<div className={'h-full'}>
+				<Header/>
+				<main className={'h-full'}>
+					{children}
+				</main>
+			</div>
 		)
 	}
 
 	return (
 		<div>
 			<SidebarProvider>
-				<AppSidebar/>
-				<main>
-					{children}
-				</main>
+				<div>
+					<Header/>
+					<AppSidebar/>
+					<main className={'h-full'}>
+						{children}
+					</main>
+				</div>
 			</SidebarProvider>
 		</div>
 	)
