@@ -12,11 +12,11 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogoutButton } from "@/components/logout-button";
-
+import { User } from "lucide-react";
 
 const Header = async () => {
 	const supabase = await createClient()
-	const {data: {user}} = await supabase.auth.getUser()
+	const { data: { user } } = await supabase.auth.getUser()
 
 	if (!user) {
 		return (
@@ -31,7 +31,6 @@ const Header = async () => {
 		)
 	}
 
-
 	return (
 		<div className={'border flex justify-between p-4 items-center w-screen'}>
 			<div className={'flex w-full justify-between items-center'}>
@@ -41,20 +40,43 @@ const Header = async () => {
 				</div>
 			</div>
 			<DropdownMenu>
-				<DropdownMenuTrigger>
-					<Avatar>
-						<AvatarImage src={user.user_metadata.avatar_url ?? "https://github.com/shadcn.png"}/>
-						<AvatarFallback>CN</AvatarFallback>
-					</Avatar>
+				<DropdownMenuTrigger asChild>
+					<Button variant="ghost" className="relative h-8 w-8 rounded-full">
+						<Avatar className="h-8 w-8">
+							<AvatarImage 
+								src={user.user_metadata.avatar_url ?? "https://github.com/shadcn.png"}
+								alt={user.email ?? "User avatar"}
+							/>
+							<AvatarFallback>
+								{user.email?.charAt(0).toUpperCase() ?? "U"}
+							</AvatarFallback>
+						</Avatar>
+					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuItem>
-						<Link href={'/user'}>Profile</Link>
+				<DropdownMenuContent align="end" className="w-56">
+					<DropdownMenuLabel className="font-normal">
+						<div className="flex flex-col space-y-1">
+							<p className="text-sm font-medium leading-none">{user.email}</p>
+							<p className="text-xs leading-none text-muted-foreground">
+								{user.user_metadata.full_name ?? user.email}
+							</p>
+						</div>
+					</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem asChild>
+						<Link href="/profile" className="flex w-full items-center">
+							<User className="mr-2 h-4 w-4" />
+							<span>Profile</span>
+						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem><LogoutButton/></DropdownMenuItem>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem>
+						<LogoutButton />
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</div>
 	)
 }
+
 export default Header

@@ -6,5 +6,5 @@ import { useRouter } from 'next/navigation'
 import { logout } from "@/app/(auth)/action";
 
 export function LogoutButton() {
-  return <Button onClick={logout}>Logout</Button>
+  return <Button onClick={logout} className={'w-full'}>Logout</Button>
 }

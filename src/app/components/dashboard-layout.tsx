@@ -1,5 +1,5 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/components/AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/app/components/app-sidebar";
 import { createClient } from "@/lib/supabase/server";
 import Header from "@/app/components/header";
 
@@ -28,7 +28,7 @@ const DashboardLayout = async ({children}: Props) => {
 				<div>
 					<Header/>
 					<AppSidebar/>
-					<main className={'h-full'}>
+					<main className={'h-full '}>
 						{children}
 					</main>
 				</div>
