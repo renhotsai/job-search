@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/app/components/theme-provider";
-import ModeToggle from "@/app/components/mode-toggle";
-import Header from "@/app/components/header";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/components/AppSidebar";
 import DashboardLayout from "@/app/components/dashboard-layout";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -42,6 +39,7 @@ export default function RootLayout ({
 			>
 				<DashboardLayout>
 					{children}
+					<Toaster />
 				</DashboardLayout>
 			</ThemeProvider>
 			</body>

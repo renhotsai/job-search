@@ -6,18 +6,22 @@ import { Button } from "@/components/ui/button"
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { linkEmailIdentity } from "@/app/(auth)/action";
+import { createClient } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
+import { User } from "@supabase/auth-js";
+import { toast } from "sonner";
 
 const formSchema = z.object({
 	email: z.string().email({
-		message: "Please enter a valid email address.",
-	}),
+		message: "Please enter a valid email address."
+	}).or(z.literal("")),
 	password: z.string().min(6, {
 		message: "Password must be at least 6 characters.",
 	}),
@@ -28,22 +32,38 @@ const formSchema = z.object({
 });
 
 const EmailSetting = () => {
+	const supabase = createClient();
+	const [user, setUser] = useState<User | null>(null);
+	useEffect(() => {
+		const getUser = async () => {
+			const {data: {user}} = await supabase.auth.getUser();
+			setUser(user)
+		}
+		getUser()
+	}, [supabase]);
+
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: "",
+			email: user?.email ?? "",
 			password: "",
 			confirmPassword: "",
 		},
 	})
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values)
+	async function onSubmit (values: z.infer<typeof formSchema>) {
+		const {error} = await linkEmailIdentity(values.password, values.email);
+		if (error) {
+			toast(`error: ${error.message}`)
+		} else {
+			toast("Success")
+		}
 	}
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="max-w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md">
+			<form onSubmit={form.handleSubmit(onSubmit)}>
 				<div className="space-y-2">
 					<h2 className="text-2xl font-bold text-gray-900">Email Settings</h2>
 					<p className="text-gray-500">Update your email and password.</p>
@@ -53,45 +73,44 @@ const EmailSetting = () => {
 					<FormField
 						control={form.control}
 						name="email"
-						render={({ field }) => (
+						render={({field}) => (
 							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input placeholder="user@example.com" type="email" {...field} />
+									<Input placeholder={`${user?.email ?? ""}`} type="email" {...field}/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
 					<FormField
 						control={form.control}
 						name="password"
-						render={({ field }) => (
+						render={({field}) => (
 							<FormItem>
 								<FormLabel>Password</FormLabel>
 								<FormControl>
 									<Input placeholder="Enter your password" type="password" {...field} />
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
 					<FormField
 						control={form.control}
 						name="confirmPassword"
-						render={({ field }) => (
+						render={({field}) => (
 							<FormItem>
 								<FormLabel>Confirm Password</FormLabel>
 								<FormControl>
 									<Input placeholder="Confirm your password" type="password" {...field} />
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
 				</div>
-				<div className="flex justify-end space-x-4">
-					<Button type="button" variant="outline">Cancel</Button>
+				<div className="flex justify-end space-x-4 p-4">
 					<Button type="submit">Connect</Button>
 				</div>
 			</form>

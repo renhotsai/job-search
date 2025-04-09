@@ -32,7 +32,7 @@ const items = [
 
 export function AppSidebar() {
 	return (
-		<Sidebar className={'inset-y-auto'} collapsible={"icon"}>
+		<Sidebar className="h-[calc(100vh-73px)] sticky top-[73px]" collapsible="icon">
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupContent>

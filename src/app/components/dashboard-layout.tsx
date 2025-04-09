@@ -3,7 +3,6 @@ import { AppSidebar } from "@/app/components/app-sidebar";
 import { createClient } from "@/lib/supabase/server";
 import Header from "@/app/components/header";
 
-
 type Props = {
 	children: React.ReactNode
 }
@@ -11,29 +10,37 @@ type Props = {
 const DashboardLayout = async ({children}: Props) => {
 	const supabase = await createClient();
 	const {data: {user}} = await supabase.auth.getUser();
+
+	const mainContentClass = "flex-1 min-h-[calc(100vh-73px)] w-full flex items-center justify-center";
+	const layoutWrapperClass = "min-h-screen w-full";
+	const contentWrapperClass = "pt-[73px] flex min-h-[calc(100vh-73px)] w-full";
+
+
 	if (!user) {
 		return (
-			<div className={'h-full'}>
+			<div className={layoutWrapperClass}>
 				<Header/>
-				<main className={'h-full'}>
-					{children}
-				</main>
+				<div className={contentWrapperClass}>
+					<main className={mainContentClass}>
+						{children}
+					</main>
+				</div>
 			</div>
 		)
 	}
 
 	return (
-		<div>
-			<SidebarProvider>
-				<div>
-					<Header/>
+		<SidebarProvider>
+			<div className={layoutWrapperClass}>
+				<Header/>
+				<div className={contentWrapperClass}>
 					<AppSidebar/>
-					<main className={'h-full '}>
+					<main className={mainContentClass}>
 						{children}
 					</main>
 				</div>
-			</SidebarProvider>
-		</div>
+			</div>
+		</SidebarProvider>
 	)
 }
 

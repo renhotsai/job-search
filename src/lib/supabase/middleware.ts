@@ -45,6 +45,10 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse
   }
 
+  if(!user && request.nextUrl.pathname === '/forgot-password') {
+    return supabaseResponse
+  }
+
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&

@@ -20,19 +20,19 @@ const Header = async () => {
 
 	if (!user) {
 		return (
-			<div className={'border flex justify-between p-4 items-center w-screen'}>
+			<header className={'border flex justify-between p-4 items-center w-screen fixed top-0 bg-background z-50'}>
 				<div>
 					<Link href={'/'}>Job Search</Link>
 				</div>
 				<Link href="/login">
 					<Button>Login</Button>
 				</Link>
-			</div>
+			</header>
 		)
 	}
 
 	return (
-		<div className={'border flex justify-between p-4 items-center w-screen'}>
+		<header className={'border flex justify-between p-4 items-center w-screen fixed top-0 bg-background z-50'}>
 			<div className={'flex w-full justify-between items-center'}>
 				<div>
 					<Link href={'/'}>Job Search</Link>
@@ -75,7 +75,7 @@ const Header = async () => {
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
-		</div>
+		</header>
 	)
 }
 
