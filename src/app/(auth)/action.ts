@@ -16,7 +16,7 @@ const login = async (email: string, password: string) => {
 async function signInWithGithub () {
 	const supabase = await createClient();
 
-	const {data, error} = await supabase.auth.signInWithOAuth({
+	const {data} = await supabase.auth.signInWithOAuth({
 		provider: 'github',
 		options: {
 			redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
@@ -31,7 +31,7 @@ async function signInWithGithub () {
 async function signInWithGoogle () {
 	const supabase = await createClient();
 
-	const {data, error} = await supabase.auth.signInWithOAuth({
+	const {data} = await supabase.auth.signInWithOAuth({
 		provider: 'google',
 		options: {
 			redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
@@ -46,7 +46,7 @@ async function signInWithGoogle () {
 
 const linkIdentity = async (provider: Provider) => {
 	const supabase = await createClient()
-	const {data, error} = await supabase.auth.linkIdentity({'provider': provider})
+	const {data} = await supabase.auth.linkIdentity({'provider': provider})
 
 	if (data.url) {
 		redirect(data.url) // use the redirect API for your server framework
@@ -55,7 +55,6 @@ const linkIdentity = async (provider: Provider) => {
 
 const linkEmailIdentity = async (password: string, email?: string) => {
 	const supabase = await createClient()
-	const {data: {user}} =await supabase.auth.getUser();
 	if (!email || email === '') {
 		return await supabase.auth.updateUser({password: password})
 	}

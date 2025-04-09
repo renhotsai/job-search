@@ -1,12 +1,9 @@
 'use client'
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator";
-import { Github, Mail } from "lucide-react";
-import { siGoogle } from 'simple-icons'
+import { Github } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
-import { User } from "@supabase/auth-js";
-import Link from "next/link";
 import { linkIdentity } from "@/app/(auth)/action";
 import { GoogleIcon } from "@/lib/icons";
 import EmailSetting from "@/app/(auth)/setting/email-setting/page";

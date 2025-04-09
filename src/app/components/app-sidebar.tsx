@@ -1,11 +1,10 @@
-import { Calendar, Home, Inbox, Search, Settings, User } from "lucide-react"
+import { Home, Settings, User } from "lucide-react"
 
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarGroup,
 	SidebarGroupContent,
-	SidebarGroupLabel,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem, SidebarTrigger,
@@ -30,19 +29,19 @@ const items = [
 	},
 ]
 
-export function AppSidebar() {
+export function AppSidebar () {
 	return (
 		<Sidebar className="h-[calc(100vh-73px)] sticky top-[73px]" collapsible="icon">
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupContent>
 						<SidebarMenu>
-							<SidebarTrigger className={'border p-4'} />
+							<SidebarTrigger className={'border p-4'}/>
 							{items.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild>
 										<a href={item.url}>
-											<item.icon />
+											<item.icon/>
 											<span>{item.title}</span>
 										</a>
 									</SidebarMenuButton>
