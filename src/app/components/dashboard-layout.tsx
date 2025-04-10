@@ -11,7 +11,7 @@ const DashboardLayout = async ({children}: Props) => {
 	const supabase = await createClient();
 	const {data: {user}} = await supabase.auth.getUser();
 
-	const mainContentClass = "flex-1 min-h-[calc(100vh-73px)] w-full flex items-center justify-center";
+	const mainContentClass = "flex-1 min-h-[calc(100vh-73px)] w-full";
 	const layoutWrapperClass = "min-h-screen w-full";
 	const contentWrapperClass = "pt-[73px] flex min-h-[calc(100vh-73px)] w-full";
 
