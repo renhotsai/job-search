@@ -18,8 +18,8 @@ const items = [
 		icon: Home,
 	},
 	{
-		title: "Profile",
-		url: "/profile",
+		title: "Resume",
+		url: "/resume",
 		icon: User,
 	},
 	{

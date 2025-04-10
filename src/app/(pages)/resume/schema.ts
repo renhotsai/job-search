@@ -23,11 +23,13 @@ const profileSchema = z.object({
 		}),
 	bio: z.string().max(500, {
 		message: "Bio must not exceed 500 characters.",
-	}).optional(),
-	linkedin: z.string().url().optional().or(z.literal("")),
-	github: z.string().url().optional().or(z.literal("")),
-	skill: z.array(z.string()).optional(),
+	}),
+	linkedin: z.string().url().or(z.literal("")),
+	github: z.string().url().or(z.literal("")),
+	skills: z.array(z.string()),
 })
 
 
+type ProfileType = z.infer<typeof profileSchema>
+export type {ProfileType}
 export { profileSchema, educationSchema }

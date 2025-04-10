@@ -1,6 +1,6 @@
 'use server'
 
-import { profileSchema } from "@/app/(pages)/profile/schema";
+import { profileSchema } from "@/app/(pages)/resume/schema";
 import { z } from "zod";
 import { db } from "@/lib/orm/db";
 import { userProfile } from "@/lib/orm/schema/user-profile";

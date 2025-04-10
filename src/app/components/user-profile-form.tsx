@@ -1,53 +1,40 @@
-'use client'
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import SkillCombobox from "@/app/components/skill-combobox";
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { profileSchema } from "@/app/(pages)/profile/schema";
-import { saveProfile } from "@/app/(pages)/profile/actions";
-import { startTransition, useActionState, useEffect, useState } from "react";
-import type { UserProfile } from "@/lib/types/user-profile";
-import { createClient } from "@/lib/supabase/client";
-import { getUserProfileFromDB } from "@/lib/orm/query/user-profile";
+import { profileSchema, ProfileType } from "@/app/(pages)/resume/schema";
+import { saveProfile } from "@/app/(pages)/resume/actions";
+import {  startTransition, useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
+import { createClient } from "@/lib/supabase/client"
+import { getUserProfileFromDB } from "@/lib/orm/query/user-profile"
 
 
-const UserProfile = () => {
+
+type Props = {
+	form:ReturnType<typeof useForm<ProfileType>>
+}
+
+const UserProfile = ({form}:Props) => {
 	const [editable, setEditable] = useState(false);
-	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-
-	const form = useForm<z.infer<typeof profileSchema>>({
-		resolver: zodResolver(profileSchema),
-		defaultValues: {
-			lastName: userProfile?.lastName ?? "",
-			firstName: userProfile?.firstName ?? "",
-			email: userProfile?.email ?? "",
-			bio: userProfile?.bio ?? "",
-			phone: userProfile?.phone ?? "",
-			linkedin: userProfile?.linkedin ?? "",
-			github: userProfile?.github ?? "",
-			skill: userProfile?.skills ?? [],
-		},
-	})
-
+	const [userProfile, setUserProfile] = useState<ProfileType|null>(null)
 	useEffect(() => {
 		const getUserProfile = async () => {
 			const supabase = createClient();
 			const {data: {user}} = await supabase.auth.getUser();
 			const userProfileFromDB = await getUserProfileFromDB(user!.id);
-
-			if (!userProfileFromDB) setEditable(true)
-			setUserProfile(userProfileFromDB)
+			if (userProfileFromDB) {
+				setUserProfile(userProfileFromDB)
+			}
 		}
 		getUserProfile()
 	}, [])
+
 
 	useEffect(() => {
 		if (userProfile !== null) {
@@ -59,7 +46,7 @@ const UserProfile = () => {
 				phone: userProfile.phone ?? "",
 				linkedin: userProfile.linkedin ?? "",
 				github: userProfile.github ?? "",
-				skill: userProfile.skills ?? [],
+				skills: userProfile.skills ?? [],
 			})
 		}
 	}, [form, userProfile]);
@@ -86,7 +73,6 @@ const UserProfile = () => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit((data) => {
-				console.log(`hihi`)
 				startTransition(() => {
 					formAction(data);
 				});
@@ -155,7 +141,7 @@ const UserProfile = () => {
 				</div>
 				<FormField
 					control={form.control}
-					name="skill"
+					name="skills"
 					render={({field}) => (
 						<FormItem>
 							<FormLabel>Skills</FormLabel>

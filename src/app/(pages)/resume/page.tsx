@@ -1,9 +1,30 @@
+'use client'
+
 import UserProfileForm from "@/app/components/user-profile-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserEducationForm from "@/app/components/user-education-form";
-import Resume from "@/app/components/resume";
+import ResumeView from "@/app/components/resume-view";
+import { useForm } from "react-hook-form";
+import { profileSchema, ProfileType } from "@/app/(pages)/resume/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const User = () => {
+
+const Resume = () => {
+
+	const form = useForm<ProfileType>({
+		resolver: zodResolver(profileSchema),
+		defaultValues: {
+			lastName: "",
+			firstName: "",
+			email: "",
+			bio: "",
+			phone: "",
+			linkedin: "",
+			github: "",
+			skills: [],
+		},
+	})
+	const { control } = form
 
 	return (
 		<div className={'h-full p-14 grid grid-cols-2'}>
@@ -14,7 +35,7 @@ const User = () => {
 					<TabsTrigger value="workExperience">Work Experience</TabsTrigger>
 				</TabsList>
 				<TabsContent value="profile">
-					<UserProfileForm/>
+					<UserProfileForm form={form}/>
 				</TabsContent>
 				<TabsContent value="education">
 					<UserEducationForm/>
@@ -24,8 +45,8 @@ const User = () => {
 				</TabsContent>
 			</Tabs>
 
-			<Resume/>
+			<ResumeView control={control}/>
 		</div>
 	)
 }
-export default User
+export default Resume
