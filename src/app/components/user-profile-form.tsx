@@ -1,5 +1,5 @@
-
 'use client'
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -14,79 +14,112 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import SkillCombobox from "@/app/components/skill-combobox";
+import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
+import { profileSchema } from "@/app/profile/schema";
+import { saveProfile } from "@/app/profile/actions";
+import { useEffect, useState } from "react";
+import type { UserProfile } from "@/lib/types/user-profile";
+import { createClient } from "@/lib/supabase/client";
+import { getUserProfileFromDB } from "@/lib/orm/query/user-profile";
+import { toast } from "sonner";
 
-const formSchema = z.object({
-	username: z.string().min(2, {
-		message: "Username must be at least 2 characters.",
-	}),
-	email: z.string().email(),
-	fullName: z.string().min(2, {
-		message: "Full name must be at least 2 characters.",
-	}),
-	bio: z.string().max(500, {
-		message: "Bio must not exceed 500 characters.",
-	}),
-	linkedin: z.string().url().optional(),
-	github: z.string().url().optional(),
-})
 
-const UserProfileForm = () =>{
+const UserProfile = () => {
+	const [editable, setEditable] = useState(false);
+	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-// 1. Define your form.
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
+
+	const form = useForm<z.infer<typeof profileSchema>>({
+		resolver: zodResolver(profileSchema),
 		defaultValues: {
-			username: "",
-			email:"",
-			fullName: "",
-			bio: "",
-			linkedin: "",
-			github: "",
+			lastName: userProfile?.lastName ?? "",
+			firstName: userProfile?.firstName ?? "",
+			email: userProfile?.email ?? "",
+			bio: userProfile?.bio ?? "",
+			phone: userProfile?.phone ?? "",
+			linkedin: userProfile?.linkedin ?? "",
+			github: userProfile?.github ?? "",
+			skill: userProfile?.skills ?? [],
 		},
 	})
 
-	// 2. Define a submit handler.
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		console.log(values)
-	}
+	useEffect(() => {
+		const getUserProfile = async () => {
+			const supabase = createClient();
+			const {data: {user}} = await supabase.auth.getUser();
+			const userProfileFromDB = await getUserProfileFromDB(user!.id);
+			console.log(`userProfileFromDB: ${JSON.stringify(userProfileFromDB)}`)
 
+			if (!userProfileFromDB) setEditable(true)
+			setUserProfile(userProfileFromDB)
+		}
+		getUserProfile()
+	}, [])
+
+	useEffect(() => {
+		if (userProfile !== null) {
+			form.reset({
+				lastName: userProfile.lastName,
+				firstName: userProfile.firstName,
+				email: userProfile.email,
+				bio: userProfile.bio ?? "",
+				phone: userProfile.phone ?? "",
+				linkedin: userProfile.linkedin ?? "",
+				github: userProfile.github ?? "",
+				skill: userProfile.skills ?? [],
+			})
+		}
+	}, [form, userProfile]);
+
+
+	const onSubmit = (data: z.infer<typeof profileSchema>) => {
+		setEditable(false)
+		saveProfile(data).then((result) => {
+			if (result === "success") {
+				toast("Event has been created", {
+					description: ``,
+				})
+			}
+		})
+	}
 
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="max-w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md">
+			<form onSubmit={form.handleSubmit(onSubmit)}
+			      className="w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md">
 				<div className="space-y-2">
 					<h2 className="text-2xl font-bold text-gray-900">Profile Information</h2>
-					<p className="text-gray-500">Update your profile information to help employers find you.</p>
+					{editable && <p className="text-gray-500">Update your profile information to help employers find you.</p>}
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}
-						name="fullName"
-						render={({ field }) => (
+						name="firstName"
+						render={({field}) => (
 							<FormItem>
-								<FormLabel>Full Name</FormLabel>
+								<FormLabel>First Name</FormLabel>
 								<FormControl>
-									<Input placeholder="John Doe" {...field} />
+									<Input placeholder="John Doe" {...field} disabled={!editable}/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
 
 					<FormField
 						control={form.control}
-						name="username"
-						render={({ field }) => (
+						name="lastName"
+						render={({field}) => (
 							<FormItem>
-								<FormLabel>Username</FormLabel>
+								<FormLabel>Last Name</FormLabel>
 								<FormControl>
-									<Input placeholder="johndoe" {...field} />
+									<Input placeholder="johndoe" {...field} disabled={!editable}/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
@@ -94,35 +127,93 @@ const UserProfileForm = () =>{
 					<FormField
 						control={form.control}
 						name="email"
-						render={({ field }) => (
+						render={({field}) => (
 							<FormItem>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input placeholder="user@example.com" type="email" {...field} />
+									<Input placeholder="user@example.com" type="email" {...field} disabled={!editable}/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="phone"
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Phone</FormLabel>
+								<FormControl>
+									<Input placeholder="1234567890" type={'text'} {...field} disabled={!editable}/>
+								</FormControl>
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
 				</div>
-
+				<FormField
+					control={form.control}
+					name="skill"
+					render={({field}) => (
+						<FormItem>
+							<FormLabel>Skills</FormLabel>
+							<FormControl>
+								<div className="space-y-4">
+									<SkillCombobox
+										value={field.value || []}
+										onChange={field.onChange}
+										disabled={!editable}
+									/>
+									<div className="flex flex-wrap gap-2">
+										{(field.value || []).map((skill) => (
+											<Badge key={skill}
+											       className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-2">
+												{skill}
+												{editable &&
+                            <button
+                                type="button"
+                                onClick={() => {
+																	field.onChange(field.value?.filter(s => s !== skill))
+																}}
+                                className="hover:text-destructive focus:outline-none"
+                            >
+                                ×
+                            </button>
+												}
+											</Badge>
+										))}
+									</div>
+								</div>
+							</FormControl>
+							{editable &&
+                  <FormDescription>
+                      Select your technical skills and expertise
+                  </FormDescription>
+							}
+							<FormMessage/>
+						</FormItem>
+					)}
+				/>
 				<FormField
 					control={form.control}
 					name="bio"
-					render={({ field }) => (
+					render={({field}) => (
 						<FormItem>
 							<FormLabel>Bio</FormLabel>
 							<FormControl>
-								<textarea
+								<Textarea
 									{...field}
 									className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 									placeholder="Tell us about yourself..."
+									disabled={!editable}
 								/>
 							</FormControl>
-							<FormDescription>
-								Brief description about your professional background and interests.
-							</FormDescription>
-							<FormMessage />
+							{editable &&
+                  <FormDescription>
+                      Brief description about your professional background and interests.
+                  </FormDescription>
+							}
+							<FormMessage/>
 						</FormItem>
 					)}
 				/>
@@ -131,13 +222,13 @@ const UserProfileForm = () =>{
 					<FormField
 						control={form.control}
 						name="linkedin"
-						render={({ field }) => (
+						render={({field}) => (
 							<FormItem>
 								<FormLabel>LinkedIn Profile</FormLabel>
 								<FormControl>
-									<Input placeholder="https://linkedin.com/in/..." {...field} />
+									<Input placeholder="https://linkedin.com/in/..." {...field} disabled={!editable}/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
@@ -145,25 +236,34 @@ const UserProfileForm = () =>{
 					<FormField
 						control={form.control}
 						name="github"
-						render={({ field }) => (
+						render={({field}) => (
 							<FormItem>
 								<FormLabel>GitHub Profile</FormLabel>
 								<FormControl>
-									<Input placeholder="https://github.com/..." {...field} />
+									<Input placeholder="https://github.com/..." {...field} disabled={!editable}/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage/>
 							</FormItem>
 						)}
 					/>
 				</div>
-
-				<div className="flex justify-end space-x-4">
-					<Button type="button" variant="outline">Cancel</Button>
-					<Button type="submit">Save Changes</Button>
-				</div>
+				{!editable &&
+            <div className="flex justify-end space-x-4">
+                <Button type="button" onClick={() => setEditable(true)}>Update</Button>
+            </div>
+				}
+				{editable &&
+            <div className="flex justify-end space-x-4">
+                <Button type="button" variant="outline" onClick={() => {
+									setEditable(false)
+									form.clearErrors()
+								}}>Cancel</Button>
+                <Button type="submit">Save Changes</Button>
+            </div>
+				}
 			</form>
 		</Form>
 	)
 }
 
-export default UserProfileForm
+export default UserProfile
