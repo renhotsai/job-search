@@ -1,15 +1,6 @@
 import { z } from "zod";
 
-
-const educationSchema = z.object({
-	school: z.string(),
-	degree: z.string(),
-	fieldOfStudy: z.string(),
-	startDate: z.string(),
-	endDate: z.string(),
-})
-
-const profileSchema = z.object({
+export const profileSchema = z.object({
 	lastName: z.string().min(2, {
 		message: "Username must be at least 2 characters.",
 	}),
@@ -30,6 +21,5 @@ const profileSchema = z.object({
 })
 
 
-type ProfileType = z.infer<typeof profileSchema>
-export type {ProfileType}
-export { profileSchema, educationSchema }
+
+export type UserProfile = z.infer<typeof profileSchema>

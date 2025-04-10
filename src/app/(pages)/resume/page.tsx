@@ -5,13 +5,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserEducationForm from "@/app/components/user-education-form";
 import ResumeView from "@/app/components/resume-view";
 import { useForm } from "react-hook-form";
-import { profileSchema, ProfileType } from "@/app/(pages)/resume/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { profileSchema, UserProfile } from "@/lib/orm/dto/user-profile";
 
 
 const Resume = () => {
 
-	const form = useForm<ProfileType>({
+	const form = useForm<UserProfile>({
 		resolver: zodResolver(profileSchema),
 		defaultValues: {
 			lastName: "",

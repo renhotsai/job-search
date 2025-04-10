@@ -12,3 +12,4 @@ export const userProfile = pgTable('user_profile', {
 	skills: text("skills").array().notNull(),
 	updateDate:timestamp('update_date')
 });
+

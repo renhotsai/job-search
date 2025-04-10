@@ -1,4 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
@@ -6,23 +5,23 @@ import { Input } from "@/components/ui/input"
 import SkillCombobox from "@/app/components/skill-combobox";
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { profileSchema, ProfileType } from "@/app/(pages)/resume/schema";
 import { saveProfile } from "@/app/(pages)/resume/actions";
 import {  startTransition, useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
 import { createClient } from "@/lib/supabase/client"
 import { getUserProfileFromDB } from "@/lib/orm/query/user-profile"
+import { UserProfile } from "@/lib/orm/dto/user-profile";
 
 
 
 type Props = {
-	form:ReturnType<typeof useForm<ProfileType>>
+	form:ReturnType<typeof useForm<UserProfile>>
 }
 
 const UserProfile = ({form}:Props) => {
 	const [editable, setEditable] = useState(false);
-	const [userProfile, setUserProfile] = useState<ProfileType|null>(null)
+	const [userProfile, setUserProfile] = useState<UserProfile|null>(null)
 	useEffect(() => {
 		const getUserProfile = async () => {
 			const supabase = createClient();
