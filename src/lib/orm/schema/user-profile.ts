@@ -1,4 +1,4 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const userProfile = pgTable('user_profile', {
 	id: uuid("id").primaryKey(),
@@ -10,4 +10,5 @@ export const userProfile = pgTable('user_profile', {
 	linkedin: text("linkedin"),
 	github: text("github"),
 	skills: text("skills").array(),
+	updateDate:timestamp('update_date')
 });

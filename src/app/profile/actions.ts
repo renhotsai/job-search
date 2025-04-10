@@ -6,23 +6,32 @@ import { db } from "@/lib/orm/db";
 import { userProfile } from "@/lib/orm/schema/user-profile";
 import { createClient } from "@/lib/supabase/server";
 import { eq } from "drizzle-orm";
-import { toast } from "sonner";
+import { dbQueryStatus } from "@/lib/types/enums";
 
-const saveProfile = async (value: z.infer<typeof profileSchema>) => {
+const saveProfile = async (prevState: any, value: z.infer<typeof profileSchema>) => {
 	console.log(`value: ${JSON.stringify(value)}`)
 	const supabase = await createClient();
 	const {data: {user}} = await supabase.auth.getUser();
 	const userProfileToInsert = {id: user!.id, ...value};
+
 	try {
-			await db.insert(userProfile).values(userProfileToInsert)
-				.onConflictDoUpdate({
-				target: userProfile.id,
-				set: userProfileToInsert,
-			});
-		return "success"
+		await db.insert(userProfile).values(userProfileToInsert)
+		.onConflictDoUpdate({
+			target: userProfile.id,
+			set: userProfileToInsert,
+		});
+		const result = await db.select().from(userProfile).where(eq(userProfile.id, user!.id))
+
+		return {
+			status:dbQueryStatus.success,
+			message: result[0].updateDate!.toUTCString()
+		}
 	} catch (error) {
-		console.error(error)
-		return error
+		console.error(`Error: ${error}`)
+		return {
+			status:dbQueryStatus.fail,
+			message: `Error saving profile`
+		}
 	}
 }
 

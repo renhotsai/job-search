@@ -19,17 +19,17 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { profileSchema } from "@/app/profile/schema";
 import { saveProfile } from "@/app/profile/actions";
-import { useEffect, useState } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 import type { UserProfile } from "@/lib/types/user-profile";
 import { createClient } from "@/lib/supabase/client";
 import { getUserProfileFromDB } from "@/lib/orm/query/user-profile";
 import { toast } from "sonner";
+import { dbQueryStatus } from "@/lib/types/enums";
 
 
 const UserProfile = () => {
 	const [editable, setEditable] = useState(false);
 	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-
 
 	const form = useForm<z.infer<typeof profileSchema>>({
 		resolver: zodResolver(profileSchema),
@@ -74,21 +74,32 @@ const UserProfile = () => {
 	}, [form, userProfile]);
 
 
-	const onSubmit = (data: z.infer<typeof profileSchema>) => {
-		setEditable(false)
-		saveProfile(data).then((result) => {
-			if (result === "success") {
-				toast("Event has been created", {
-					description: ``,
-				})
-			}
-		})
+	const initialState = {
+		status: dbQueryStatus.fail,
+		message: '',
 	}
+
+	const [state, formAction, pending] = useActionState(saveProfile, initialState)
+	useEffect(() => {
+		if (state && state.status) {
+			toast(state.status, {
+				description: state.message
+			});
+		}
+	}, [state]);
+
+	useEffect(() => {
+		setEditable(pending);
+	}, [pending]);
 
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}
+			<form onSubmit={form.handleSubmit((data) => {
+				startTransition(() => {
+					formAction(data);
+				});
+			})}
 			      className="w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md">
 				<div className="space-y-2">
 					<h2 className="text-2xl font-bold text-gray-900">Profile Information</h2>
