@@ -4,21 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import SkillCombobox from "@/app/components/skill-combobox";
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { profileSchema } from "@/app/profile/schema";
-import { saveProfile } from "@/app/profile/actions";
+import { profileSchema } from "@/app/(pages)/profile/schema";
+import { saveProfile } from "@/app/(pages)/profile/actions";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import type { UserProfile } from "@/lib/types/user-profile";
 import { createClient } from "@/lib/supabase/client";
@@ -50,7 +42,6 @@ const UserProfile = () => {
 			const supabase = createClient();
 			const {data: {user}} = await supabase.auth.getUser();
 			const userProfileFromDB = await getUserProfileFromDB(user!.id);
-			console.log(`userProfileFromDB: ${JSON.stringify(userProfileFromDB)}`)
 
 			if (!userProfileFromDB) setEditable(true)
 			setUserProfile(userProfileFromDB)
@@ -74,14 +65,13 @@ const UserProfile = () => {
 	}, [form, userProfile]);
 
 
-	const initialState = {
-		status: dbQueryStatus.fail,
+	const [state, formAction, pending] = useActionState(saveProfile, {
+		status: dbQueryStatus.waiting,
 		message: '',
-	}
+	})
 
-	const [state, formAction, pending] = useActionState(saveProfile, initialState)
 	useEffect(() => {
-		if (state && state.status) {
+		if (state && state.status && state.status !== dbQueryStatus.waiting) {
 			toast(state.status, {
 				description: state.message
 			});
@@ -96,6 +86,7 @@ const UserProfile = () => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit((data) => {
+				console.log(`hihi`)
 				startTransition(() => {
 					formAction(data);
 				});

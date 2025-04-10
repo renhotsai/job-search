@@ -1,6 +1,6 @@
 'use server'
 
-import { profileSchema } from "@/app/profile/schema";
+import { profileSchema } from "@/app/(pages)/profile/schema";
 import { z } from "zod";
 import { db } from "@/lib/orm/db";
 import { userProfile } from "@/lib/orm/schema/user-profile";
@@ -9,7 +9,6 @@ import { eq } from "drizzle-orm";
 import { dbQueryStatus } from "@/lib/types/enums";
 
 const saveProfile = async (prevState: any, value: z.infer<typeof profileSchema>) => {
-	console.log(`value: ${JSON.stringify(value)}`)
 	const supabase = await createClient();
 	const {data: {user}} = await supabase.auth.getUser();
 	const userProfileToInsert = {id: user!.id, ...value};
