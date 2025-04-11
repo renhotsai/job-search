@@ -1,6 +1,7 @@
 import { pgTable, serial, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { userEducation } from "@/lib/orm/schema/user-education";
+import { userWorkExperience } from "@/lib/orm/schema/user-work-experience";
 
 export const userProfile = pgTable('user_profile', {
 	id: serial('id'),
@@ -13,9 +14,10 @@ export const userProfile = pgTable('user_profile', {
 	linkedin: text("linkedin").notNull(),
 	github: text("github").notNull(),
 	skills: text("skills").array().notNull(),
-	updateDate:timestamp('update_date')
+	updateDate:timestamp('update_date').defaultNow().notNull(),
 });
 
 export const usersProfileRelations = relations(userProfile, ({ many }) => ({
-	education: many(userEducation),
+	educations: many(userEducation),
+	workExperiences: many(userWorkExperience),
 }));

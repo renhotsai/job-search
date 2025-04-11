@@ -7,18 +7,26 @@ import { UserEducationCreateDto } from "@/lib/orm/dto/user-educatoin";
 
 export const getUserEducationFromDB = async (userId: string) => {
 	try {
-
-		return await db.select().from(userEducation).where(eq(userEducation.userId, userId));
+		return db.select().from(userEducation).where(eq(userEducation.userId, userId));
 	} catch (error) {
-		console.error(error)
 		throw error
 	}
 }
 
 export const insertUserEducationToDB = async (data: UserEducationCreateDto) => {
-	await db.insert(userEducation).values(data);
+	try {
+		const result = await db.insert(userEducation).values(data).returning()
+		return result[0]
+	} catch (error) {
+		throw error
+	}
 }
 
-export const removeUserEducationFromDB = async (id:number) =>{
-	await db.delete(userEducation).where(eq(userEducation.id, id))
+export const removeUserEducationFromDB = async (id: number) => {
+	try {
+		const result = await db.delete(userEducation).where(eq(userEducation.id, id)).returning()
+		return result[0]
+	} catch (error) {
+		throw error
+	}
 }

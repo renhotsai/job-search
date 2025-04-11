@@ -1,34 +1,27 @@
 import { Dispatch, SetStateAction } from "react";
-import { UserEducationDto } from "@/lib/orm/dto/user-educatoin";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardTitle,
 } from "@/components/ui/card"
-import { getUserEducationFromDB, removeUserEducationFromDB } from "@/lib/orm/query/user-education";
-import { createClient } from "@/lib/supabase/client";
+import {  removeUserEducationFromDB } from "@/lib/orm/query/user-education";
 import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
+import { UserEducation } from "@/lib/types/user";
 
 
 type props = {
-	userEducations: UserEducationDto[],
-	setUserEducations: Dispatch<SetStateAction<UserEducationDto[]>>
+	userEducations: UserEducation[],
+	setUserEducations: Dispatch<SetStateAction<UserEducation[]>>
 }
 
 export const UserEducationCard = ({userEducations, setUserEducations}: props) => {
 
 
 	const removeUserEducation = async (id: number) => {
-		const supabase = createClient();
-		const {data: {user}} = await supabase.auth.getUser();
-		const userId = user!.id
-		await removeUserEducationFromDB(id);
-		getUserEducationFromDB(userId).then((userEducationFromDB) => {
-			setUserEducations(() => [...userEducationFromDB]);
-		});
-
+		const result = await removeUserEducationFromDB(id);
+		setUserEducations((prevState) => prevState.filter((education) => education.id !== result.id))
 		toast(dbQueryStatus.success, {
 			description: `Education Removed`
 		})

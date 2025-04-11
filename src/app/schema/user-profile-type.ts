@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const profileSchema = z.object({
+export const UserProfileSchema = z.object({
 	lastName: z.string().min(2, {
 		message: "Username must be at least 2 characters.",
 	}),
@@ -22,4 +22,4 @@ export const profileSchema = z.object({
 
 
 
-export type UserProfileType = z.infer<typeof profileSchema>
+export type UserProfileType = z.infer<typeof UserProfileSchema>

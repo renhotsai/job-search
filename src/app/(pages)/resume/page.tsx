@@ -5,14 +5,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ResumeView from "@/app/components/resume-view";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema, UserProfileType } from "@/app/schema/user-profile-type";
+import { UserProfileSchema, UserProfileType } from "@/app/schema/user-profile-type";
 import { UserEducation } from "@/app/components/user-education";
+import UserWorkExperience from "@/app/components/user-work-experience";
 
 
 const Resume = () => {
 
 	const form = useForm<UserProfileType>({
-		resolver: zodResolver(profileSchema),
+		resolver: zodResolver(UserProfileSchema),
 		defaultValues: {
 			lastName: "",
 			firstName: "",
@@ -24,7 +25,7 @@ const Resume = () => {
 			skills: [],
 		},
 	})
-	const { control } = form
+	const {control} = form
 
 	return (
 		<div className={'h-full p-14 grid grid-cols-2'}>
@@ -41,7 +42,7 @@ const Resume = () => {
 					<UserEducation/>
 				</TabsContent>
 				<TabsContent value="workExperience">
-					<div></div>
+					<UserWorkExperience/>
 				</TabsContent>
 			</Tabs>
 

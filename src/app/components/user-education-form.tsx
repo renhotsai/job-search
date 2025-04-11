@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { educationSchema, UserEducationType } from "@/app/schema/user-education";
+import { UserEducationSchema, UserEducationType } from "@/app/schema/user-education";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getDegreesFromDB } from "@/lib/orm/query/degrees";
 import { Degrees } from "@/app/schema/degrees";
@@ -21,14 +21,15 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns"
 import { getFieldOfStudyFromDB } from "@/lib/orm/query/field-of-study";
 import { FieldOfStudy } from "@/app/schema/field-of-study";
-import { getUserEducationFromDB, insertUserEducationToDB } from "@/lib/orm/query/user-education";
+import { insertUserEducationToDB } from "@/lib/orm/query/user-education";
 import { dbQueryStatus } from "@/lib/types/enums";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
-import { UserEducationDto } from "@/lib/orm/dto/user-educatoin";
+
+import { UserEducation } from "@/lib/types/user";
 
 type props = {
-	setUserEducations: Dispatch<SetStateAction<UserEducationDto[]>>
+	setUserEducations: Dispatch<SetStateAction<UserEducation[]>>
 }
 
 const UserEducationForm = ({ setUserEducations}: props) => {
@@ -57,7 +58,7 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 	}
 
 	const form = useForm<UserEducationType>({
-		resolver: zodResolver(educationSchema),
+		resolver: zodResolver(UserEducationSchema),
 		defaultValues: {
 			school: "",
 			degree: "",
@@ -74,13 +75,11 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 		const userId = user!.id
 		const data = {userId, ...formData}
 		try {
-			await insertUserEducationToDB(data)
-			getUserEducationFromDB(userId).then((userEducationFromDB) => {
-				setUserEducations(() => [...userEducationFromDB]);
-			});
+			const result=await insertUserEducationToDB(data)
+			setUserEducations((prevState) => [...prevState, result])
 
 			toast(dbQueryStatus.success, {
-				description: `Education Added`
+				description: `Education Added on ${result.updateDate}`
 			});
 			form.reset()
 		} catch (e) {

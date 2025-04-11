@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const educationSchema = z.object({
+export const UserEducationSchema = z.object({
 	school: z.string().min(1,{
 		message: "School name is required"
 	}),
@@ -16,9 +16,9 @@ export const educationSchema = z.object({
 	(data) => data.startDate <= data.endDate,
 	{
 		path: ["endDate"],
-		message: "Graduation date must be after start date",
+		message: "Graduation date must be after Start date",
 	}
 );
 
 
-export type UserEducationType = z.infer<typeof educationSchema>
+export type UserEducationType = z.infer<typeof UserEducationSchema>

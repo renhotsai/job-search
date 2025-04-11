@@ -10,7 +10,7 @@ export const userEducation = pgTable('user_education', {
 	fieldOfStudy: text('field_of_study').notNull(),
 	startDate: date('start_date', {mode: 'date'}).notNull(),
 	endDate: date('end_date', {mode: 'date'}).notNull(),
-	updateDate:timestamp('update_date')
+	updateDate:timestamp('update_date').defaultNow().notNull(),
 })
 
 export const userEducationRelations = relations(userEducation, ({one}) => ({

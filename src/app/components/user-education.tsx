@@ -1,13 +1,13 @@
 import UserEducationForm from "@/app/components/user-education-form";
 import { useEffect, useState } from "react";
-import { UserEducationDto } from "@/lib/orm/dto/user-educatoin";
 import { getUserEducationFromDB } from "@/lib/orm/query/user-education";
 import { createClient } from "@/lib/supabase/client";
 import { UserEducationCard } from "@/app/components/user-education-card";
+import { UserEducation as UserEducationType } from "@/lib/types/user";
 
 export const UserEducation = () => {
 
-	const [userEducations, setUserEducations] = useState<UserEducationDto[]>([])
+	const [userEducations, setUserEducations] = useState<UserEducationType[]>([])
 	useEffect(() => {
 		const getUserEducation = async () => {
 			const supabase = createClient();
