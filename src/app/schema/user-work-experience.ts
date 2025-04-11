@@ -15,7 +15,7 @@ export const UserWorkExperienceSchema = z.object({
 	(data) => data.startDate <= data.endDate,
 	{
 		path: ["endDate"],
-		message: "Graduation date must be after start date",
+		message: "End date must be after Start date",
 	}
 );
 

@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction } from "react"
-import { UserWorkExperience } from "@/lib/orm/dto/user-work-experience";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase/client";
-import { getUserWorkExperienceFromDB, removeUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
+import { removeUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
 import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
+import { UserWorkExperience } from "@/lib/types/user";
 
 type props = {
 	userWorkExperience: UserWorkExperience[],
@@ -14,19 +13,20 @@ type props = {
 const UserWorkExperienceCard = ({userWorkExperience, setUserWorkExperience}: props) => {
 
 
-	const removeUserEducation = async (id: number) => {
-		const supabase = createClient();
-		const {data: {user}} = await supabase.auth.getUser();
-		const userId = user!.id
-		await removeUserWorkExperienceFromDB(id);
-		getUserWorkExperienceFromDB(userId).then((userEducationFromDB) => {
-			setUserWorkExperience(() => [...userEducationFromDB]);
-		});
-
-		toast(dbQueryStatus.success, {
-			description: `Education Removed`
-		})
+	const removeUserWorkExperience = async (id: number) => {
+		try {
+			const result = await removeUserWorkExperienceFromDB(id);
+			setUserWorkExperience((prevState) => prevState.filter((workExperience) => workExperience.id !== result.id))
+			toast(dbQueryStatus.success, {
+				description: `Work Experience Removed`
+			})
+		} catch (error) {
+			toast(dbQueryStatus.fail, {
+				description: `Work Experience Removed Failed`
+			})
+		}
 	}
+
 
 	return (
 		<div>
@@ -40,7 +40,7 @@ const UserWorkExperienceCard = ({userWorkExperience, setUserWorkExperience}: pro
 						aria-label="Remove education"
 						className="absolute top-4 right-4 text-xl hover:text-destructive transition-colors duration-150 ease-in-out focus:outline-none"
 						onClick={() => {
-							removeUserEducation(workExperience.id).then()
+							removeUserWorkExperience(workExperience.id).then()
 						}}
 					>
 						&times;

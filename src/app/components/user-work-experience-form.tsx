@@ -1,4 +1,3 @@
-import { UserWorkExperience } from "@/lib/orm/dto/user-work-experience";
 import { Dispatch, SetStateAction } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,14 +14,15 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
 import { Textarea } from "@/components/ui/textarea";
-import { getUserWorkExperienceFromDB, insertUserWorkExperienceToDB } from "@/lib/orm/query/user-work-experience";
-
+import { insertUserWorkExperienceToDB } from "@/lib/orm/query/user-work-experience";
+import { UserWorkExperience } from "@/lib/types/user";
 
 type props = {
 	setUserWorkExperience: Dispatch<SetStateAction<UserWorkExperience[]>>
 }
 
-const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
+
+const UserWorkExperienceForm = ({setUserWorkExperience}: props) => {
 
 
 	const formatCapitalized = (schoolName: string) => {
@@ -40,8 +40,6 @@ const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
 			company: "",
 			jobTitle: "",
 			jobDescription: "",
-			startDate: new Date(),
-			endDate: new Date(),
 		},
 	});
 
@@ -54,24 +52,22 @@ const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
 		const userId = user!.id
 		const data = {userId, ...formData}
 		try {
-			await insertUserWorkExperienceToDB(data)
-			getUserWorkExperienceFromDB(userId).then((userWorkExperienceFromDB) => {
-				setUserWorkExperience(() => [...userWorkExperienceFromDB]);
-			});
+			const result = await insertUserWorkExperienceToDB(data)
+			setUserWorkExperience((prevState) => [...prevState, result])
 
 			toast(dbQueryStatus.success, {
-				description: `Education Added`
+				description: `Work Experience Added on ${result.updateDate}`
 			});
 			form.reset()
 		} catch (e) {
 			console.error(`error:${e}`)
 			toast(dbQueryStatus.fail, {
-				description: `Error Education Add Failed`
+				description: `Error Work Experience Add Failed`
 			})
 		}
 	}
 
-	return(
+	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submitAction)}
 			      className="w-xl mx-auto p-6 space-y-8 rounded-lg shadow-md my-6 bg-background text-foreground">
@@ -81,7 +77,7 @@ const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
 						name="company"
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>School</FormLabel>
+								<FormLabel>Company</FormLabel>
 								<FormControl>
 									<Input placeholder="company" {...field}
 									       onChange={field.onChange}
@@ -99,7 +95,7 @@ const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
 						name="jobTitle"
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Degree</FormLabel>
+								<FormLabel>Job Title</FormLabel>
 								<FormControl>
 									<Input placeholder="Job Title" {...field}
 									       onChange={field.onChange}
@@ -156,7 +152,7 @@ const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
 						name="endDate"
 						render={({field}) => (
 							<FormItem className="flex flex-col">
-								<FormLabel>Graduation Date</FormLabel>
+								<FormLabel>End Date</FormLabel>
 								<Popover>
 									<PopoverTrigger asChild>
 										<FormControl>
@@ -195,7 +191,7 @@ const UserWorkExperienceForm = ({setUserWorkExperience}:props) =>{
 					name="jobDescription"
 					render={({field}) => (
 						<FormItem>
-							<FormLabel>Degree</FormLabel>
+							<FormLabel>Job Description</FormLabel>
 							<FormControl>
 								<Textarea
 									placeholder="Tell us a little bit about your work"

@@ -1,9 +1,9 @@
 import UserWorkExperienceForm from "@/app/components/user-work-experience-form";
 import UserWorkExperienceCard from "@/app/components/user-work-experience-card";
 import { useEffect, useState } from "react";
-import { UserWorkExperience as UserWorkExperienceType } from "@/lib/orm/dto/user-work-experience";
 import { createClient } from "@/lib/supabase/client";
 import { getUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
+import { UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
 
 
 const UserWorkExperience = () => {
@@ -20,7 +20,7 @@ const UserWorkExperience = () => {
 	}, []);
 	return (
 		<div>
-			<UserWorkExperienceForm setUserWorkExperience={setUserWorkExperience}/>
+			<UserWorkExperienceForm userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
 			<UserWorkExperienceCard userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
 		</div>
 	)
