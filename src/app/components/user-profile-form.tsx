@@ -5,23 +5,21 @@ import { Input } from "@/components/ui/input"
 import SkillCombobox from "@/app/components/skill-combobox";
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { saveProfile } from "@/app/(pages)/resume/actions";
-import {  startTransition, useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
 import { createClient } from "@/lib/supabase/client"
-import { getUserProfileFromDB } from "@/lib/orm/query/user-profile"
-import { UserProfile } from "@/lib/orm/dto/user-profile";
-
+import { getUserProfileFromDB, insertUserProfile } from "@/lib/orm/query/user-profile"
+import { UserProfileType as UserProfileType } from "@/app/schema/user-profile-type";
 
 
 type Props = {
-	form:ReturnType<typeof useForm<UserProfile>>
+	form: ReturnType<typeof useForm<UserProfileType>>
 }
 
-const UserProfile = ({form}:Props) => {
+const UserProfile = ({form}: Props) => {
 	const [editable, setEditable] = useState(false);
-	const [userProfile, setUserProfile] = useState<UserProfile|null>(null)
+	const [userProfile, setUserProfile] = useState<UserProfileType | null>(null)
 	useEffect(() => {
 		const getUserProfile = async () => {
 			const supabase = createClient();
@@ -29,6 +27,8 @@ const UserProfile = ({form}:Props) => {
 			const userProfileFromDB = await getUserProfileFromDB(user!.id);
 			if (userProfileFromDB) {
 				setUserProfile(userProfileFromDB)
+			}else{
+				setEditable(true)
 			}
 		}
 		getUserProfile()
@@ -50,32 +50,29 @@ const UserProfile = ({form}:Props) => {
 		}
 	}, [form, userProfile]);
 
+	const saveProfile = async () => {
+		const supabase = createClient();
+		const {data: {user}} = await supabase.auth.getUser();
 
-	const [state, formAction, pending] = useActionState(saveProfile, {
-		status: dbQueryStatus.waiting,
-		message: '',
-	})
-
-	useEffect(() => {
-		if (state && state.status && state.status !== dbQueryStatus.waiting) {
-			toast(state.status, {
-				description: state.message
-			});
+		const userId = user!.id
+		const formData = form.getValues();
+		const data = {userId, ...formData}
+		try {
+			const updateDate = await insertUserProfile(data)
+			toast(dbQueryStatus.success, {
+				description: `Profile updated on ${updateDate}`
+			})
+		} catch (e) {
+			console.error(`error:${e}`)
+			toast(dbQueryStatus.fail, {
+				description: `Error saving profile`
+			})
 		}
-	}, [state]);
-
-	useEffect(() => {
-		setEditable(pending);
-	}, [pending]);
-
+	}
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit((data) => {
-				startTransition(() => {
-					formAction(data);
-				});
-			})}
+			<form onSubmit={form.handleSubmit(saveProfile)}
 			      className="w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md">
 				<div className="space-y-2">
 					<h2 className="text-2xl font-bold text-gray-900">Profile Information</h2>

@@ -22,4 +22,4 @@ export const profileSchema = z.object({
 
 
 
-export type UserProfile = z.infer<typeof profileSchema>
+export type UserProfileType = z.infer<typeof profileSchema>

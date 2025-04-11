@@ -1,8 +1,8 @@
 import { Control, useWatch } from "react-hook-form";
-import { ProfileType } from "@/app/(pages)/resume/schema";
+import { UserProfileType } from "@/app/schema/user-profile-type";
 
 type Props={
-	control: Control<ProfileType>
+	control: Control<UserProfileType>
 }
 
 const ResumeView = ({control}:Props) => {

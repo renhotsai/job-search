@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/popover"
 import { useEffect, useState } from "react";
 import { getSkillsFromDB } from '@/lib/orm/query/skills'
-import { Skill } from "@/lib/orm/dto/skills"
+import { Skill } from "@/app/schema/skills"
 
 
 const SkillCombobox = ({value = [], onChange, disabled}: {

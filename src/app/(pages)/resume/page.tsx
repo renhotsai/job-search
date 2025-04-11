@@ -2,16 +2,16 @@
 
 import UserProfileForm from "@/app/components/user-profile-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import UserEducationForm from "@/app/components/user-education-form";
 import ResumeView from "@/app/components/resume-view";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema, UserProfile } from "@/lib/orm/dto/user-profile";
+import { profileSchema, UserProfileType } from "@/app/schema/user-profile-type";
+import { UserEducation } from "@/app/components/user-education";
 
 
 const Resume = () => {
 
-	const form = useForm<UserProfile>({
+	const form = useForm<UserProfileType>({
 		resolver: zodResolver(profileSchema),
 		defaultValues: {
 			lastName: "",
@@ -38,10 +38,10 @@ const Resume = () => {
 					<UserProfileForm form={form}/>
 				</TabsContent>
 				<TabsContent value="education">
-					<UserEducationForm/>
+					<UserEducation/>
 				</TabsContent>
 				<TabsContent value="workExperience">
-					<UserEducationForm/>
+					<div></div>
 				</TabsContent>
 			</Tabs>
 
