@@ -94,7 +94,7 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submitAction)}
-			      className="w-xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md my-6">
+			      className="w-xl mx-auto p-6 space-y-8 rounded-lg shadow-md my-6 bg-background text-foreground">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}

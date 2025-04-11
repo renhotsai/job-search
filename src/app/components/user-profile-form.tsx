@@ -27,7 +27,7 @@ const UserProfile = ({form}: Props) => {
 			const userProfileFromDB = await getUserProfileFromDB(user!.id);
 			if (userProfileFromDB) {
 				setUserProfile(userProfileFromDB)
-			}else{
+			} else {
 				setEditable(true)
 			}
 		}
@@ -73,9 +73,9 @@ const UserProfile = ({form}: Props) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(saveProfile)}
-			      className="w-2xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md">
+			      className="w-2xl mx-auto p-6 space-y-8 rounded-lg shadow-md bg-background text-foreground">
 				<div className="space-y-2">
-					<h2 className="text-2xl font-bold text-gray-900">Profile Information</h2>
+					<h2 className="text-2xl font-bold ">Profile Information</h2>
 					{editable && <p className="text-gray-500">Update your profile information to help employers find you.</p>}
 				</div>
 

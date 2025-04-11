@@ -39,12 +39,12 @@ export const UserEducationCard = ({userEducations, setUserEducations}: props) =>
 			{userEducations.map((education) => (
 				<Card
 					key={education.id}
-					className="relative w-xl mx-auto p-6 space-y-8 bg-white rounded-lg shadow-md my-6">
+					className="relative w-xl mx-auto p-6 space-y-8 rounded-lg shadow-md my-6 bg-background text-muted-foreground">
 					{/* "×" button in top-right */}
 					<button
 						type="button"
 						aria-label="Remove education"
-						className="absolute top-4 right-4 text-xl text-gray-400 hover:text-destructive transition-colors duration-150 ease-in-out focus:outline-none"
+						className="absolute top-4 right-4 text-xl hover:text-destructive transition-colors duration-150 ease-in-out focus:outline-none"
 						onClick={() => {removeUserEducation(education.id).then()}}
 					>
 						&times;

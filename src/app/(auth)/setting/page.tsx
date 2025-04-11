@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { linkIdentity } from "@/app/(auth)/action";
 import { GoogleIcon,GithubIcon } from "@/lib/icons";
 import EmailSetting from "@/app/(auth)/setting/email-setting/page";
+import { Card } from "@/components/ui/card";
 
 
 const Setting = () => {
@@ -32,7 +33,7 @@ const Setting = () => {
 
 	return (
 		<div className={'flex items-center justify-center h-full'}>
-			<div className="max-w-2xl mx-auto p-8 space-y-10 bg-white rounded-lg shadow-md w-full">
+			<Card className="max-w-2xl mx-auto p-8 space-y-10 rounded-lg shadow-md w-full">
 				<div className="space-y-2">
 					<h1 className="text-2xl font-bold tracking-tight">Login Method</h1>
 					<p className="text-muted-foreground">
@@ -48,7 +49,7 @@ const Setting = () => {
 					<div className="grid gap-4">
 						<Button
 							variant="outline"
-							className="w-full flex items-center gap-3 h-12 justify-center hover:bg-muted/50 transition-colors"
+							className="w-full flex items-center gap-3 h-12 justify-center hover:bg-background transition-colors"
 							disabled={github}
 							onClick={() => {
 								linkIdentity('github').then()
@@ -67,7 +68,7 @@ const Setting = () => {
 
 						<Button
 							variant="outline"
-							className="w-full flex items-center gap-3 h-12 hover:bg-muted/50 transition-colors justify-center"
+							className="w-full flex items-center gap-3 h-12 hover:bg-background transition-colors justify-center"
 							disabled={google}
 							onClick={() => {
 								linkIdentity('google').then()
@@ -85,7 +86,7 @@ const Setting = () => {
 						</Button>
 					</div>
 				</div>
-			</div>
+			</Card>
 		</div>
 	)
 }

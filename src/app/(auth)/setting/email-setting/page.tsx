@@ -65,8 +65,8 @@ const EmailSetting = () => {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)}>
 				<div className="space-y-2">
-					<h2 className="text-2xl font-bold text-gray-900">Email Settings</h2>
-					<p className="text-gray-500">Update your email and password.</p>
+					<h2 className="text-2xl font-bold ">Email Settings</h2>
+					<p className="text-sm text-muted-foreground">Update your email and password.</p>
 				</div>
 
 				<div className="grid gap-6">
