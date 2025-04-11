@@ -36,7 +36,7 @@ const SkillCombobox = ({value = [], onChange, disabled}: {
 			const skillFromDB = await getSkillsFromDB()
 			setSkills(skillFromDB)
 		}
-		getSkill()
+		getSkill().then()
 	}, []);
 
 	// Group skills by category

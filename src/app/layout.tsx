@@ -3,6 +3,7 @@ import "./globals.css";
 import ThemeProvider from "@/app/components/theme-provider";
 import DashboardLayout from "@/app/components/dashboard-layout";
 import { Toaster } from "@/components/ui/sonner";
+import React, { ReactNode } from "react";
 
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout ({
 	                                    children,
                                     }: Readonly<{
-	children: React.ReactNode;
+	children: ReactNode;
 }>) {
 	return (
 		<>

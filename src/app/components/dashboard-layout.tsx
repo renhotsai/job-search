@@ -2,9 +2,11 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/components/app-sidebar";
 import { createClient } from "@/lib/supabase/server";
 import Header from "@/app/components/header";
+import { ReactNode } from "react";
 
 type Props = {
-	children: React.ReactNode
+	children:
+		ReactNode
 }
 
 const DashboardLayout = async ({children}: Props) => {

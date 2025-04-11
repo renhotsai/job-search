@@ -1,11 +1,11 @@
 'use client'
+
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator";
-import { Github } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import { linkIdentity } from "@/app/(auth)/action";
-import { GoogleIcon } from "@/lib/icons";
+import { GoogleIcon,GithubIcon } from "@/lib/icons";
 import EmailSetting from "@/app/(auth)/setting/email-setting/page";
 
 
@@ -27,7 +27,7 @@ const Setting = () => {
 				}
 			}
 		};
-		getUser();
+		getUser().then();
 	}, [supabase]);
 
 	return (
@@ -51,11 +51,11 @@ const Setting = () => {
 							className="w-full flex items-center gap-3 h-12 justify-center hover:bg-muted/50 transition-colors"
 							disabled={github}
 							onClick={() => {
-								linkIdentity('github')
+								linkIdentity('github').then()
 							}}
 						>
 							<div className="flex items-center gap-3 h-12 justify-center">
-								<Github size={16} className="text-gray-500"/>
+								<GithubIcon/>
 								<div className="flex-1 text-left">
 									<div className="font-medium">GitHub</div>
 									<div className="text-xs text-muted-foreground">
@@ -70,7 +70,7 @@ const Setting = () => {
 							className="w-full flex items-center gap-3 h-12 hover:bg-muted/50 transition-colors justify-center"
 							disabled={google}
 							onClick={() => {
-								linkIdentity('google')
+								linkIdentity('google').then()
 							}}
 						>
 							<div className="flex items-center gap-3 h-12 justify-center">

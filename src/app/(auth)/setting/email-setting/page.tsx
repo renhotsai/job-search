@@ -39,7 +39,7 @@ const EmailSetting = () => {
 			const {data: {user}} = await supabase.auth.getUser();
 			setUser(user)
 		}
-		getUser()
+		getUser().then()
 	}, [supabase]);
 
 

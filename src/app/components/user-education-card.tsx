@@ -45,7 +45,7 @@ export const UserEducationCard = ({userEducations, setUserEducations}: props) =>
 						type="button"
 						aria-label="Remove education"
 						className="absolute top-4 right-4 text-xl text-gray-400 hover:text-destructive transition-colors duration-150 ease-in-out focus:outline-none"
-						onClick={() => {removeUserEducation(education.id)}}
+						onClick={() => {removeUserEducation(education.id).then()}}
 					>
 						&times;
 					</button>
