@@ -1,26 +1,19 @@
 import UserWorkExperienceForm from "@/app/components/user-work-experience-form";
 import UserWorkExperienceCard from "@/app/components/user-work-experience-card";
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { getUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
+import { Dispatch, SetStateAction } from "react";
 import { UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
 
 
-const UserWorkExperience = () => {
+type props = {
+	userWorkExperience: UserWorkExperienceType[],
+	setUserWorkExperience: Dispatch<SetStateAction<UserWorkExperienceType[]>>
+}
 
-	const [userWorkExperience, setUserWorkExperience] = useState<UserWorkExperienceType[]>([])
-	useEffect(() => {
-		const getUserEducation = async () => {
-			const supabase = createClient();
-			const {data: {user}} = await supabase.auth.getUser();
-			const userEducationFromDB = await getUserWorkExperienceFromDB(user!.id);
-			setUserWorkExperience(userEducationFromDB)
-		}
-		getUserEducation().then()
-	}, []);
+
+const UserWorkExperience = ({userWorkExperience, setUserWorkExperience}: props)  => {
 	return (
 		<div>
-			<UserWorkExperienceForm userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
+			<UserWorkExperienceForm setUserWorkExperience={setUserWorkExperience}/>
 			<UserWorkExperienceCard userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
 		</div>
 	)

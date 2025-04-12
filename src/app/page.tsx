@@ -1,6 +1,6 @@
 const Home = () => {
 	return (
-		<div className={'flex justify-center items-center h-full w-full'}>
+		<div className={'flex justify-center items-center h-screen*2 w-full'}>
 			this is main page
 		</div>
 	);

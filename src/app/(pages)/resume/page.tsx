@@ -2,12 +2,16 @@
 
 import UserProfileForm from "@/app/components/user-profile-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import ResumeView from "@/app/components/resume-view";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserProfileSchema, UserProfileType } from "@/app/schema/user-profile-type";
 import { UserEducation } from "@/app/components/user-education";
 import UserWorkExperience from "@/app/components/user-work-experience";
+import { useEffect, useState } from "react";
+import { UserEducation as UserEducationType,  UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
+import { createClient } from "@/lib/supabase/client";
+import { getUserEducationFromDB } from "@/lib/orm/query/user-education";
+import { getUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
 
 
 const Resume = () => {
@@ -25,7 +29,28 @@ const Resume = () => {
 			skills: [],
 		},
 	})
-	const {control} = form
+
+	const [userEducations, setUserEducations] = useState<UserEducationType[]>([])
+	useEffect(() => {
+		const getUserEducation = async () => {
+			const supabase = createClient();
+			const {data: {user}} = await supabase.auth.getUser();
+			const userEducationFromDB = await getUserEducationFromDB(user!.id);
+			setUserEducations(userEducationFromDB)
+		}
+		getUserEducation().then()
+	}, []);
+
+	const [userWorkExperience, setUserWorkExperience] = useState<UserWorkExperienceType[]>([])
+	useEffect(() => {
+		const getUserEducation = async () => {
+			const supabase = createClient();
+			const {data: {user}} = await supabase.auth.getUser();
+			const userEducationFromDB = await getUserWorkExperienceFromDB(user!.id);
+			setUserWorkExperience(userEducationFromDB)
+		}
+		getUserEducation().then()
+	}, []);
 
 	return (
 		<div className={'h-full p-14 grid grid-cols-2'}>
@@ -39,14 +64,12 @@ const Resume = () => {
 					<UserProfileForm form={form}/>
 				</TabsContent>
 				<TabsContent value="education">
-					<UserEducation/>
+					<UserEducation userEducations={userEducations} setUserEducations={setUserEducations}/>
 				</TabsContent>
 				<TabsContent value="workExperience">
-					<UserWorkExperience/>
+					<UserWorkExperience userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
 				</TabsContent>
 			</Tabs>
-
-			<ResumeView control={control}/>
 		</div>
 	)
 }

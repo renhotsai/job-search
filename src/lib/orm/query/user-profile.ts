@@ -16,11 +16,11 @@ export const getUserProfileFromDB = async (userId: string) => {
 
 export const insertUserProfile = async (userProfileToInsert: UserProfileCreateDto) => {
 	try {
-		return db.insert(userProfile).values(userProfileToInsert)
+		return (await db.insert(userProfile).values(userProfileToInsert)
 			.onConflictDoUpdate({
 				target: userProfile.userId,
 				set: userProfileToInsert,
-			}).returning({'updateDate': userProfile.updateDate});
+			}).returning())[0];
 	} catch (error) {
 		throw error
 	}

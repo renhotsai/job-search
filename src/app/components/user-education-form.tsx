@@ -93,7 +93,7 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submitAction)}
-			      className="w-xl mx-auto p-6 space-y-8 rounded-lg shadow-md my-6 bg-background text-foreground">
+			      className="space-y-8 rounded-lg shadow-md">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}
@@ -157,7 +157,7 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 											<Button
 												variant={"outline"}
 												className={cn(
-													"w-[240px] pl-3 text-left font-normal",
+													"w-full pl-3 text-left font-normal",
 													!field.value && "text-muted-foreground"
 												)}
 											>
@@ -195,7 +195,7 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 											<Button
 												variant={"outline"}
 												className={cn(
-													"w-[240px] pl-3 text-left font-normal",
+													"w-full pl-3 text-left font-normal",
 													!field.value && "text-muted-foreground"
 												)}
 											>

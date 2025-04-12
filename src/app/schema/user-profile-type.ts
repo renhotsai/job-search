@@ -8,10 +8,7 @@ export const UserProfileSchema = z.object({
 	firstName: z.string().min(2, {
 		message: "Full name must be at least 2 characters.",
 	}),
-	phone: z.string()
-		.refine(val => val === "" || /^\d{10}$/.test(val), {
-			message: "Phone number must be 10 digits or empty",
-		}),
+	phone: z.string(),
 	bio: z.string().max(500, {
 		message: "Bio must not exceed 500 characters.",
 	}),

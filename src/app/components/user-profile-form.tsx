@@ -58,9 +58,9 @@ const UserProfile = ({form}: Props) => {
 		const formData = form.getValues();
 		const data = {userId, ...formData}
 		try {
-			const updateDate = await insertUserProfile(data)
+			const result = await insertUserProfile(data)
 			toast(dbQueryStatus.success, {
-				description: `Profile updated on ${updateDate}`
+				description: `Profile updated on ${result.updateDate}`
 			})
 		} catch (e) {
 			console.error(`error:${e}`)
@@ -73,7 +73,7 @@ const UserProfile = ({form}: Props) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(saveProfile)}
-			      className="w-2xl mx-auto p-6 space-y-8 rounded-lg shadow-md bg-background text-foreground">
+			      className=" space-y-8 rounded-lg shadow-md">
 				<div className="space-y-2">
 					<h2 className="text-2xl font-bold ">Profile Information</h2>
 					{editable && <p className="text-gray-500">Update your profile information to help employers find you.</p>}
