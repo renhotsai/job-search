@@ -12,18 +12,16 @@ type Props = {
 
 const DashboardLayout = async ({children}: Props) => {
 	const supabase = await createClient();
-	const {data:{user}} = await supabase.auth.getUser();
+	const {data: {user}} = await supabase.auth.getUser();
 	return (
 		<SidebarProvider>
 			<Header/>
 			{user &&
           <AppSidebar/>
 			}
-			<Suspense fallback={<Skeleton/>}>
-				<main className={'mt-20 w-full py-14 px-20 border'}>
-					{children}
-				</main>
-			</Suspense>
+			<main className={'mt-20 w-full py-14 px-20 border'}>
+				{children}
+			</main>
 		</SidebarProvider>
 	)
 }

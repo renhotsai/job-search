@@ -7,12 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserProfileSchema, UserProfileType } from "@/app/schema/user-profile-type";
 import { UserEducation } from "@/app/components/user-education";
 import UserWorkExperience from "@/app/components/user-work-experience";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserEducation as UserEducationType, UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
 import { createClient } from "@/lib/supabase/client";
 import { getUserEducationFromDB } from "@/lib/orm/query/user-education";
 import { getUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
-import { Skeleton } from "@/components/ui/skeleton";
+
 
 
 const Profile = () => {

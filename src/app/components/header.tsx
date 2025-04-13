@@ -18,19 +18,6 @@ const Header = async () => {
 	const supabase = await createClient()
 	const {data: {user}} = await supabase.auth.getUser()
 
-	// if (!user) {
-	// 	return (
-	// 		<header className={'border flex justify-between p-4 items-center w-screen fixed top-0 bg-background z-50'}>
-	// 			<div>
-	// 				<Link href={'/'}>Job Search</Link>
-	// 			</div>
-	// 			<div className={'flex gap-5'}>
-
-
-	// 			</div>
-	// 		</header>
-	// 	)
-	// }
 
 	return (
 		<header className={'border flex justify-between p-4 items-center w-screen fixed h-20 top-0 bg-sidebar z-50 gap-5'}>
