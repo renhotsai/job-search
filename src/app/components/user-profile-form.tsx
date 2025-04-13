@@ -73,12 +73,7 @@ const UserProfile = ({form}: Props) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(saveProfile)}
-			      className=" space-y-8 rounded-lg shadow-md">
-				<div className="space-y-2">
-					<h2 className="text-2xl font-bold ">Profile Information</h2>
-					{editable && <p className="text-gray-500">Update your profile information to help employers find you.</p>}
-				</div>
-
+			      className="space-y-8 rounded-lg shadow-md mt-5">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}

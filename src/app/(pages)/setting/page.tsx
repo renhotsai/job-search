@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import { linkIdentity } from "@/app/(auth)/action";
 import { GoogleIcon,GithubIcon } from "@/lib/icons";
-import EmailSetting from "@/app/(auth)/setting/email-setting/page";
+import EmailSetting from "@/app/(pages)/setting/email-setting/page";
 import { Card } from "@/components/ui/card";
 
 

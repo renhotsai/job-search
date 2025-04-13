@@ -70,7 +70,7 @@ const UserWorkExperienceForm = ({setUserWorkExperience}: props) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(submitAction)}
-			      className="space-y-8 rounded-lg shadow-md my-6 ">
+			      className="space-y-8 rounded-lg shadow-md mt-5">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<FormField
 						control={form.control}

@@ -13,13 +13,13 @@ import {
 // Menu items.
 const items = [
 	{
-		title: "Home",
-		url: "/",
+		title: "Dashboard",
+		url: "/dashboard",
 		icon: Home,
 	},
 	{
-		title: "Resume",
-		url: "/resume",
+		title: "Profile",
+		url: "/profile",
 		icon: User,
 	},
 	{
@@ -31,7 +31,7 @@ const items = [
 
 export function AppSidebar () {
 	return (
-		<Sidebar className="h-[calc(100vh-73px)] sticky top-[73px]" collapsible="icon">
+		<Sidebar className=" fiexd z-50 top-20" collapsible="icon">
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupContent>

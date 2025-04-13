@@ -7,14 +7,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserProfileSchema, UserProfileType } from "@/app/schema/user-profile-type";
 import { UserEducation } from "@/app/components/user-education";
 import UserWorkExperience from "@/app/components/user-work-experience";
-import { useEffect, useState } from "react";
-import { UserEducation as UserEducationType,  UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
+import { Suspense, useEffect, useState } from "react";
+import { UserEducation as UserEducationType, UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
 import { createClient } from "@/lib/supabase/client";
 import { getUserEducationFromDB } from "@/lib/orm/query/user-education";
 import { getUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
-const Resume = () => {
+const Profile = () => {
 
 	const form = useForm<UserProfileType>({
 		resolver: zodResolver(UserProfileSchema),
@@ -53,8 +54,9 @@ const Resume = () => {
 	}, []);
 
 	return (
-		<div className={'h-full p-14 grid grid-cols-2'}>
-			<Tabs defaultValue="profile" className="w-[400px]">
+		<div className={'flex flex-col gap-5'}>
+			<h2 className="text-4xl font-bold "> Information</h2>
+			<Tabs defaultValue="profile" className="">
 				<TabsList>
 					<TabsTrigger value="profile">Profile</TabsTrigger>
 					<TabsTrigger value="education">Education</TabsTrigger>
@@ -73,4 +75,5 @@ const Resume = () => {
 		</div>
 	)
 }
-export default Resume
+
+export default Profile
