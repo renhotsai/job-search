@@ -1,57 +1,20 @@
-'use client'
-
-import UserProfileForm from "@/app/components/user-profile-form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UserProfileSchema, UserProfileType } from "@/app/schema/user-profile-type";
-import { UserEducation } from "@/app/components/user-education";
-import UserWorkExperience from "@/app/components/user-work-experience";
-import { useEffect, useState } from "react";
-import { UserEducation as UserEducationType, UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { getUserEducationFromDB } from "@/lib/orm/query/user-education";
 import { getUserWorkExperienceFromDB } from "@/lib/orm/query/user-work-experience";
+import { getUserProfileFromDB } from "@/lib/orm/query/user-profile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UserProfileForm from "@/app/components/user-profile-form";
+import UserEducation from "@/app/components/user-education";
+import UserWorkExperience from "@/app/components/user-work-experience";
 
 
+const Profile = async () => {
 
-const Profile = () => {
-
-	const form = useForm<UserProfileType>({
-		resolver: zodResolver(UserProfileSchema),
-		defaultValues: {
-			lastName: "",
-			firstName: "",
-			email: "",
-			bio: "",
-			phone: "",
-			linkedin: "",
-			github: "",
-			skills: [],
-		},
-	})
-
-	const [userEducations, setUserEducations] = useState<UserEducationType[]>([])
-	useEffect(() => {
-		const getUserEducation = async () => {
-			const supabase = createClient();
-			const {data: {user}} = await supabase.auth.getUser();
-			const userEducationFromDB = await getUserEducationFromDB(user!.id);
-			setUserEducations(userEducationFromDB)
-		}
-		getUserEducation().then()
-	}, []);
-
-	const [userWorkExperience, setUserWorkExperience] = useState<UserWorkExperienceType[]>([])
-	useEffect(() => {
-		const getUserEducation = async () => {
-			const supabase = createClient();
-			const {data: {user}} = await supabase.auth.getUser();
-			const userEducationFromDB = await getUserWorkExperienceFromDB(user!.id);
-			setUserWorkExperience(userEducationFromDB)
-		}
-		getUserEducation().then()
-	}, []);
+	const supabase = await createClient();
+	const {data: {user}} = await supabase.auth.getUser();
+	const userEducationFromDB = await getUserEducationFromDB(user!.id);
+	const userWorkExperience = await getUserWorkExperienceFromDB(user!.id);
+	const userProfileFromDB = await getUserProfileFromDB(user!.id);
 
 	return (
 		<div className={'flex flex-col gap-5'}>
@@ -63,16 +26,17 @@ const Profile = () => {
 					<TabsTrigger value="workExperience">Work Experience</TabsTrigger>
 				</TabsList>
 				<TabsContent value="profile">
-					<UserProfileForm form={form}/>
+					<UserProfileForm userProfile={userProfileFromDB}/>
 				</TabsContent>
 				<TabsContent value="education">
-					<UserEducation userEducations={userEducations} setUserEducations={setUserEducations}/>
+					<UserEducation userEducations={userEducationFromDB}/>
 				</TabsContent>
 				<TabsContent value="workExperience">
-					<UserWorkExperience userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
+					<UserWorkExperience userWorkExperience={userWorkExperience} />
 				</TabsContent>
 			</Tabs>
 		</div>
+
 	)
 }
 

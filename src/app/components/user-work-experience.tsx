@@ -1,20 +1,17 @@
+'use client'
+
 import UserWorkExperienceForm from "@/app/components/user-work-experience-form";
 import UserWorkExperienceCard from "@/app/components/user-work-experience-card";
-import { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import { UserWorkExperience as UserWorkExperienceType } from "@/lib/types/user";
 
+const UserWorkExperience = ({userWorkExperience}: { userWorkExperience: UserWorkExperienceType[] }) => {
 
-type props = {
-	userWorkExperience: UserWorkExperienceType[],
-	setUserWorkExperience: Dispatch<SetStateAction<UserWorkExperienceType[]>>
-}
-
-
-const UserWorkExperience = ({userWorkExperience, setUserWorkExperience}: props)  => {
+	const [workExperience, setWorkExperience] = useState(userWorkExperience)
 	return (
 		<div>
-			<UserWorkExperienceForm setUserWorkExperience={setUserWorkExperience}/>
-			<UserWorkExperienceCard userWorkExperience={userWorkExperience} setUserWorkExperience={setUserWorkExperience}/>
+			<UserWorkExperienceForm setUserWorkExperience={setWorkExperience}/>
+			<UserWorkExperienceCard userWorkExperience={workExperience} setUserWorkExperience={setWorkExperience}/>
 		</div>
 	)
 }

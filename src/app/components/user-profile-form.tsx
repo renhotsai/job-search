@@ -1,3 +1,5 @@
+'use client'
+
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
@@ -10,23 +12,35 @@ import { toast } from "sonner";
 import { dbQueryStatus } from "@/lib/types/enums";
 import { createClient } from "@/lib/supabase/client"
 import { getUserProfileFromDB, insertUserProfile } from "@/lib/orm/query/user-profile"
-import { UserProfileType as UserProfileType } from "@/app/schema/user-profile-type";
+import { UserProfileSchema, UserProfileType as UserProfileType } from "@/app/schema/user-profile-type";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 
-type Props = {
-	form: ReturnType<typeof useForm<UserProfileType>>
-}
-
-const UserProfile = ({form}: Props) => {
+const UserProfile = ({userProfile}: {userProfile: UserProfileType}) => {
 	const [editable, setEditable] = useState(false);
-	const [userProfile, setUserProfile] = useState<UserProfileType | null>(null)
+	const [profile, setProfile] = useState<UserProfileType | null>(userProfile)
+
+	const form = useForm<UserProfileType>({
+		resolver: zodResolver(UserProfileSchema),
+		defaultValues: {
+			lastName: "",
+			firstName: "",
+			email: "",
+			bio: "",
+			phone: "",
+			linkedin: "",
+			github: "",
+			skills: [],
+		},
+	})
+
 	useEffect(() => {
 		const getUserProfile = async () => {
 			const supabase = createClient();
 			const {data: {user}} = await supabase.auth.getUser();
 			const userProfileFromDB = await getUserProfileFromDB(user!.id);
 			if (userProfileFromDB) {
-				setUserProfile(userProfileFromDB)
+				setProfile(userProfileFromDB)
 			} else {
 				setEditable(true)
 			}
@@ -36,19 +50,19 @@ const UserProfile = ({form}: Props) => {
 
 
 	useEffect(() => {
-		if (userProfile !== null) {
+		if (profile !== null) {
 			form.reset({
-				lastName: userProfile.lastName,
-				firstName: userProfile.firstName,
-				email: userProfile.email,
-				bio: userProfile.bio ?? "",
-				phone: userProfile.phone ?? "",
-				linkedin: userProfile.linkedin ?? "",
-				github: userProfile.github ?? "",
-				skills: userProfile.skills ?? [],
+				lastName: profile.lastName,
+				firstName: profile.firstName,
+				email: profile.email,
+				bio: profile.bio ?? "",
+				phone: profile.phone ?? "",
+				linkedin: profile.linkedin ?? "",
+				github: profile.github ?? "",
+				skills: profile.skills ?? [],
 			})
 		}
-	}, [form, userProfile]);
+	}, [form, profile]);
 
 	const saveProfile = async () => {
 		const supabase = createClient();

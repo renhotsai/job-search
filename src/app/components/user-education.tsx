@@ -1,18 +1,18 @@
+'use client'
 import UserEducationForm from "@/app/components/user-education-form";
-import { Dispatch, SetStateAction } from "react";
 import { UserEducationCard } from "@/app/components/user-education-card";
 import { UserEducation as UserEducationType } from "@/lib/types/user";
+import { useState } from "react";
 
-type props = {
-	userEducations: UserEducationType[],
-	setUserEducations: Dispatch<SetStateAction<UserEducationType[]>>
-}
 
-export const UserEducation = ({userEducations, setUserEducations}: props) => {
+const UserEducation = ({userEducations}: { userEducations: UserEducationType[] }) => {
+	const [educations, setEducations] = useState(userEducations)
 	return (
 		<div>
-			<UserEducationForm setUserEducations={setUserEducations}/>
-			<UserEducationCard userEducations={userEducations} setUserEducations={setUserEducations}/>
+			<UserEducationForm setUserEducations={setEducations}/>
+			<UserEducationCard userEducations={educations} setUserEducations={setEducations}/>
 		</div>
 	)
 }
+
+export default UserEducation
