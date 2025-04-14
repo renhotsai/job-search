@@ -7,7 +7,7 @@ const Dashboard = async() => {
 	const userJobs = await getUserJobsFromDB();
 	console.log(`userJobs:${userJobs.length}`)
 	return (
-		<div className={'flex gap-5 w-full border border-red-500'}>
+		<div className={'flex gap-5 w-full'}>
 			<SearchBoard/>
 			<ResultTable userJobs={userJobs}/>
 		</div>
