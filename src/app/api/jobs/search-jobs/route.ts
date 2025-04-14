@@ -31,17 +31,13 @@ export const POST = async (request: Request) => {
 
 		const snakeData =convertKeysToSnake(data)
 
-
-		console.log("data:", snakeData)
-
 		const client = new ApifyClient({
 			token: process.env.APIFY_API_TOKEN,
 		});
 
-		const run = await client.actor("JkfTWxtpgfvcRQn3p").call(data);
+		const run = await client.actor("JkfTWxtpgfvcRQn3p").call(snakeData);
 
 		// Fetch and print Actor results from the run's dataset (if any)
-		console.log('Results from dataset');
 		const {items} = await client.dataset(run.defaultDatasetId).listItems();
 
 		const itemsWithUserId = items.map((item) => ({...item,user_id:user?.id}))
@@ -49,8 +45,6 @@ export const POST = async (request: Request) => {
 		const {error} = await supabaseClient
 			.from('user_jobs')
 			.insert(itemsWithUserId)
-
-		console.log(`data:${JSON.stringify(data)}`)
 		if (error) {
 			console.error(error)
 			return new NextResponse(`error: ${error}`, {status: 500})

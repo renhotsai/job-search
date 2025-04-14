@@ -1,3 +1,5 @@
+import { UserJobsEnums } from "@/lib/types/enums";
+
 export interface UserProfile {
 	id:number
 	userId: string
@@ -52,4 +54,5 @@ export interface  UserJob {
 	numApplicants:string | null
 	salaryRange: string | null
 	timePosted: string | null
+	status: UserJobsEnums
 }

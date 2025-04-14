@@ -5,7 +5,7 @@ import { getUserJobsFromDB } from "@/lib/orm/query/user-jobs";
 const Dashboard = async() => {
 
 	const userJobs = await getUserJobsFromDB();
-	console.log(`userJobs:${userJobs.length}`)
+
 	return (
 		<div className={'flex gap-5 w-full'}>
 			<SearchBoard/>

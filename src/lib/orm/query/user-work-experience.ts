@@ -26,7 +26,6 @@ export const removeUserWorkExperienceFromDB = async (id: number) => {
 	try {
 		const result = await db.delete(userWorkExperience).where(eq(userWorkExperience.id, id)).returning()
 
-		console.log(`result:${JSON.stringify(result)}`)
 		return result[0]
 	} catch (error) {
 		throw error

@@ -1,4 +1,4 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const userJobs = pgTable('user_jobs', {
 	id: serial("id").primaryKey(),
@@ -18,4 +18,6 @@ export const userJobs = pgTable('user_jobs', {
 	numApplicants:text("num_applicants"),
 	salaryRange: text("salary_range"),
 	timePosted: text("time_posted"),
+	status:integer("status"),
+	updateDate:timestamp('update_date').defaultNow().notNull(),
 });
