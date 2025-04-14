@@ -29,10 +29,10 @@ const ResultTable = ({userJobs}: { userJobs: UserJob[] }) => {
 	const [paginatedJobs, setPaginatedJobs] = useState<UserJob[]>([])
 	const [totalPages, setTotalPages] = useState(0);
 
-	useEffect(()=>{
+	useEffect(() => {
 		const pages = Math.ceil(userJobs.length / PAGE_SIZE);
 		setTotalPages(pages)
-	},[userJobs])
+	}, [userJobs])
 
 
 	useEffect(() => {
@@ -59,53 +59,51 @@ const ResultTable = ({userJobs}: { userJobs: UserJob[] }) => {
 	};
 
 	return (
-		<div>
-			<Card>
-				<CardHeader>
-					<CardTitle className={"text-2xl"}>Jobs</CardTitle>
-					<CardDescription></CardDescription>
-				</CardHeader>
-				<Table className="w-full">
-					<TableHeader className={'sticky top-0 bg-card'}>
-						<TableRow>
-							<TableHead>Company</TableHead>
-							<TableHead>Job Title</TableHead>
-							<TableHead>Location</TableHead>
-							<TableHead>Actions</TableHead>
+		<Card className={'w-full'}>
+			<CardHeader>
+				<CardTitle className={"text-2xl"}>Jobs</CardTitle>
+				<CardDescription></CardDescription>
+			</CardHeader>
+			<Table className="w-full table-fixed">
+				<TableHeader className={'sticky top-0 bg-card'}>
+					<TableRow>
+						<TableHead className="w-1/5">Company</TableHead>
+						<TableHead className="w-1/5">Job Title</TableHead>
+						<TableHead className="w-1/5">Location</TableHead>
+						<TableHead className="w-1/4">Actions</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{paginatedJobs.map((job) => (
+						<TableRow key={job.jobId}>
+							<TableCell className={'break-words whitespace-normal'}>{job.companyName}</TableCell>
+							<TableCell className={'break-words whitespace-normal'}>{job.jobTitle}</TableCell>
+							<TableCell className={'break-words whitespace-normal'}>{job.location}</TableCell>
+							<TableCell >
+								<JobButtons job={job}/>
+							</TableCell>
 						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{paginatedJobs.map((job) => (
-							<TableRow key={job.jobId}>
-								<TableCell>{job.companyName}</TableCell>
-								<TableCell>{job.jobTitle}</TableCell>
-								<TableCell>{job.location}</TableCell>
-								<TableCell>
-									<JobButtons job={job}/>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-				<Pagination>
-					<PaginationContent>
-						<PaginationItem>
-							<PaginationPrevious href="#" onClick={handlePreviousPage}/>
+					))}
+				</TableBody>
+			</Table>
+			<Pagination>
+				<PaginationContent>
+					<PaginationItem>
+						<PaginationPrevious href="#" onClick={handlePreviousPage}/>
+					</PaginationItem>
+					{Array.from({length: totalPages}, (_, index) => (
+						<PaginationItem key={index + 1}>
+							<PaginationLink href="#" onClick={() => setCurrentPage(index + 1)}>
+								{index + 1}
+							</PaginationLink>
 						</PaginationItem>
-						{Array.from({ length: totalPages }, (_, index) => (
-							<PaginationItem key={index + 1}>
-								<PaginationLink href="#" onClick={() => setCurrentPage(index + 1)}>
-									{index + 1}
-								</PaginationLink>
-							</PaginationItem>
-						))}
-						<PaginationItem>
-							<PaginationNext href="#" onClick={handleNextPage}/>
-						</PaginationItem>
-					</PaginationContent>
-				</Pagination>
-			</Card>
-		</div>
+					))}
+					<PaginationItem>
+						<PaginationNext href="#" onClick={handleNextPage}/>
+					</PaginationItem>
+				</PaginationContent>
+			</Pagination>
+		</Card>
 	)
 }
 

@@ -52,7 +52,9 @@ const SearchBoard = () => {
 		jobTitle: z.string(),
 		jobType: z.string(),
 		location: z.string(),
-		workSchedule: z.string()
+		workSchedule: z.string(),
+		job_post_time: z.string(),
+		jobs_entries: z.number(),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -63,26 +65,28 @@ const SearchBoard = () => {
 			jobType: JobTypeEnum.Any,
 			location: "",
 			workSchedule: WorkScheduleEnum.Any.toString(),
+			job_post_time: "r86400",
+			jobs_entries: 10,
 		},
 	});
 
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		try {
-			const postData = {...data, job_post_time: "r86400"}
+			console.log(`data`,data)
 
 			const response = await fetch('/api/jobs/search-jobs', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(postData),
+				body: JSON.stringify(data),
 			})
 
 			if (response.ok) {
 				const result = await response.json()
 				toast("Success", {
-					description: `Found ${result.length} jobs`
+					description: `Found ${result.items} Jobs`
 				})
 			}
 		} catch (e) {

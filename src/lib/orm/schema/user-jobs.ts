@@ -1,7 +1,7 @@
-import { integer, pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const userJobs = pgTable('user_jobs', {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	userId: text("user_id").notNull(),
 	jobId: text("job_id").primaryKey(),
 	jobTitle: text("job_title"),
