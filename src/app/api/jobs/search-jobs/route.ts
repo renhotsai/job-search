@@ -1,45 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
-import { ApifyClient } from 'apify-client';
+import { searchJobsFromApify } from "@/lib/apify/apify";
+import { JobSearchParams } from "@/lib/types/apify";
+
+
 
 export const POST = async (request: Request) => {
 	try {
 		const supabaseClient = await createClient();
-
-		const {data: {session}} = await supabaseClient.auth.getSession();
 		const {data: {user}}=await supabaseClient.auth.getUser();
-		if (!session) {
-			return new Response(null, {status: 401})
-		}
 
-		if (!process.env.JOBSEARCH_URL) {
-			return new Response(null, {status: 500})
-		}
+		const data = await request.json() as JobSearchParams
 
-
-		const data = await request.json()
-
-		function toSnakeCase(str: string) {
-			return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-		}
-
-		function convertKeysToSnake<T extends Record<string, string>>(obj: T): Record<string, string> {
-			return Object.fromEntries(
-				Object.entries(obj).map(([key, value]) => [toSnakeCase(key), value])
-			);
-		}
-
-		const snakeData =convertKeysToSnake(data)
-
-		const client = new ApifyClient({
-			token: process.env.APIFY_API_TOKEN,
-		});
-
-		const run = await client.actor("JkfTWxtpgfvcRQn3p").call(snakeData);
-
-		// Fetch and print Actor results from the run's dataset (if any)
-		const {items} = await client.dataset(run.defaultDatasetId).listItems();
-
+		const items = await searchJobsFromApify(data)
 		const itemsWithUserId = items.map((item) => ({...item,user_id:user?.id}))
 
 		const {error} = await supabaseClient

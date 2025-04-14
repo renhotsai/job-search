@@ -3,7 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,24 +15,16 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ExperienceLevelEnum, JobTypeEnum, WorkScheduleEnum } from "@/lib/types/enums";
+import { UserJobSchema, UserJobSchemaType } from "@/app/schema/user-job";
 
 
 const SearchBoard = () => {
 
 
 
-	const formSchema = z.object({
-		experienceLevel: z.string(),
-		jobTitle: z.string(),
-		jobType: z.string(),
-		location: z.string(),
-		workSchedule: z.string(),
-		job_post_time: z.string(),
-		jobs_entries: z.number(),
-	});
 
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
+	const form = useForm<UserJobSchemaType>({
+		resolver: zodResolver(UserJobSchema),
 		defaultValues: {
 			experienceLevel: ExperienceLevelEnum.Any.toString(),
 			jobTitle: "",
@@ -46,7 +37,7 @@ const SearchBoard = () => {
 	});
 
 
-	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+	const onSubmit = async (data: UserJobSchemaType) => {
 		try {
 			const response = await fetch('/api/jobs/search-jobs', {
 				method: 'POST',

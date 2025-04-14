@@ -56,3 +56,5 @@ export interface  UserJob {
 	timePosted: string | null
 	status: UserJobsEnums
 }
+
+
