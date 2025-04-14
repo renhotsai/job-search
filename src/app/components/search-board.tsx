@@ -15,37 +15,12 @@ import {
 	SelectValue
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ExperienceLevelEnum, JobTypeEnum, WorkScheduleEnum } from "@/lib/types/enums";
 
 
 const SearchBoard = () => {
 
-	enum ExperienceLevelEnum {
-		Any = 0,
-		Intern = 1,
-		Assistant,
-		Junior,
-		"Mid-Senior",
-		Director,
-		Executive
-	}
 
-	enum JobTypeEnum {
-		Any = "A",
-		"Full Time" = "F",
-		"Part Time" = "P",
-		Contract = "C",
-		Temporary = "T",
-		Volunteer = "V",
-		Internship = "I",
-	}
-
-
-	enum WorkScheduleEnum {
-		Any = 0,
-		"OnSite" = 1,
-		"Remote",
-		"Hybrid"
-	}
 
 	const formSchema = z.object({
 		experienceLevel: z.string(),
