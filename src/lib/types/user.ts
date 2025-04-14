@@ -33,3 +33,23 @@ export interface UserWorkExperience {
 	endDate: Date
 	updateDate: Date
 }
+
+export interface  UserJob {
+	id: number
+	userId: string
+	jobId: string
+	jobTitle: string | null
+	jobDescription: string | null
+	companyName: string | null
+	companyUrl: string | null
+	location: string | null
+	jobUrl: string | null
+	applyUrl: string | null,
+	seniorityLevel: string | null,
+	employmentType: string | null
+	industries: string | null
+	jobFunction: string | null
+	numApplicants:string | null
+	salaryRange: string | null
+	timePosted: string | null
+}

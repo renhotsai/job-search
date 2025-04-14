@@ -227,7 +227,7 @@ const UserEducationForm = ({ setUserEducations}: props) => {
 					name="fieldOfStudy"
 					render={({field}) => (
 						<FormItem>
-							<FormLabel>Degree</FormLabel>
+							<FormLabel>Field of Study</FormLabel>
 							<FormControl>
 								<Select {...field} onValueChange={field.onChange}>
 									<SelectTrigger className="w-full">
