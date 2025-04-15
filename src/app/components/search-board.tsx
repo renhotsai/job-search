@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -16,13 +16,12 @@ import {
 import { toast } from "sonner";
 import { ExperienceLevelEnum, JobTypeEnum, WorkScheduleEnum } from "@/lib/types/enums";
 import { UserJobSchema, UserJobSchemaType } from "@/app/schema/user-job";
+import { useRouter } from "next/navigation";
 
 
 const SearchBoard = () => {
 
-
-
-
+	const router = useRouter()
 	const form = useForm<UserJobSchemaType>({
 		resolver: zodResolver(UserJobSchema),
 		defaultValues: {
@@ -38,24 +37,23 @@ const SearchBoard = () => {
 
 
 	const onSubmit = async (data: UserJobSchemaType) => {
-		try {
-			const response = await fetch('/api/jobs/search-jobs', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			})
 
-			if (response.ok) {
-				const result = await response.json()
-				toast("Success", {
-					description: `Found ${result.items} Jobs`
-				})
-			}
-		} catch (e) {
-			console.error(e)
+		const response = await fetch('/api/jobs/search-jobs', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+
+		if (!response.ok) {
+			toast.error("Error searching jobs")
+			throw new Error("Error searching jobs")
 		}
+
+		const result = await response.json()
+		toast.success(result.message)
+		router.refresh()
 	};
 
 
@@ -68,6 +66,32 @@ const SearchBoard = () => {
 				<CardContent>
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className={'flex flex-col gap-5'}>
+							<FormField
+								control={form.control}
+								name="jobTitle"
+								render={({field}) => (
+									<FormItem>
+										<FormLabel>Job Title</FormLabel>
+										<FormControl>
+											<Input placeholder="Job Title" {...field} />
+										</FormControl>
+										<FormMessage/>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="location"
+								render={({field}) => (
+									<FormItem>
+										<FormLabel>Location</FormLabel>
+										<FormControl>
+											<Input placeholder="Location" {...field} />
+										</FormControl>
+										<FormMessage/>
+									</FormItem>
+								)}
+							/>
 							<FormField
 								control={form.control}
 								name="experienceLevel"
@@ -95,18 +119,6 @@ const SearchBoard = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="jobTitle"
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Job Title</FormLabel>
-										<FormControl>
-											<Input placeholder="Job Title" {...field} />
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
 								name="jobType"
 								render={({field}) => (
 									<FormItem>
@@ -124,18 +136,6 @@ const SearchBoard = () => {
 													))}
 												</SelectContent>
 											</Select>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="location"
-								render={({field}) => (
-									<FormItem>
-										<FormLabel>Location</FormLabel>
-										<FormControl>
-											<Input placeholder="Location" {...field} />
 										</FormControl>
 									</FormItem>
 								)}

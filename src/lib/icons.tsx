@@ -1,4 +1,4 @@
-import { siGithub, siGoogle } from "simple-icons";
+import { siGithub, siGoogle, siSearxng } from "simple-icons";
 
 const GoogleIcon = () => {
 	return (
@@ -27,4 +27,18 @@ const GithubIcon = () => {
 		</svg>
 	);
 }
-export { GoogleIcon,GithubIcon }
+
+const SearxngIcon = () => {
+	return(
+		<svg
+			role="img"
+			viewBox="0 0 24 24"
+			xmlns="http://www.w3.org/2000/svg"
+			className="size-[16px]"
+			fill="currentColor"
+		>
+			<path d={siSearxng.path}/>
+		</svg>
+	)
+}
+export { GoogleIcon,GithubIcon ,SearxngIcon}

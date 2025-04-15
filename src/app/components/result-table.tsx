@@ -56,44 +56,49 @@ const ResultTable = ({userJobs}: { userJobs: UserJob[] }) => {
 	};
 
 
-
 	return (
 		<Card className={'w-full'}>
 			<CardHeader>
 				<CardTitle className={"text-2xl"}>Jobs</CardTitle>
 				<CardDescription></CardDescription>
 			</CardHeader>
-			<Table className="w-full table-fixed">
-				<TableHeader className={'sticky top-0 bg-card'}>
-					<TableRow>
-						<TableHead className="w-1/3">Company</TableHead>
-						<TableHead className="w-1/3">Job Title</TableHead>
-						<TableHead className="w-1/3">Location</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{paginatedJobs.map((job) => (
-						<ResultTableRow key={job.jobId} job={job} />
-					))}
-				</TableBody>
-			</Table>
-			<Pagination>
-				<PaginationContent>
-					<PaginationItem>
-						<PaginationPrevious href="#" onClick={handlePreviousPage}/>
-					</PaginationItem>
-					{Array.from({length: totalPages}, (_, index) => (
-						<PaginationItem key={index + 1}>
-							<PaginationLink href="#" onClick={() => setCurrentPage(index + 1)}>
-								{index + 1}
-							</PaginationLink>
-						</PaginationItem>
-					))}
-					<PaginationItem>
-						<PaginationNext href="#" onClick={handleNextPage}/>
-					</PaginationItem>
-				</PaginationContent>
-			</Pagination>
+
+			{userJobs.length > 0 ? <div>
+          <Table className="w-full table-fixed">
+              <TableHeader className={'sticky top-0 bg-card'}>
+                  <TableRow>
+                      <TableHead className="w-1/3">Company</TableHead>
+                      <TableHead className="w-1/3">Job Title</TableHead>
+                      <TableHead className="w-1/3">Location</TableHead>
+                  </TableRow>
+              </TableHeader>
+              <TableBody>
+								{paginatedJobs.map((job) => (
+									<ResultTableRow key={job.jobId} job={job}/>
+								))}
+              </TableBody>
+          </Table>
+          <Pagination>
+              <PaginationContent>
+                  <PaginationItem>
+                      <PaginationPrevious href="#" onClick={handlePreviousPage}/>
+                  </PaginationItem>
+								{Array.from({length: totalPages}, (_, index) => (
+									<PaginationItem key={index + 1}>
+										<PaginationLink href="#" onClick={() => setCurrentPage(index + 1)}>
+											{index + 1}
+										</PaginationLink>
+									</PaginationItem>
+								))}
+                  <PaginationItem>
+                      <PaginationNext href="#" onClick={handleNextPage}/>
+                  </PaginationItem>
+              </PaginationContent>
+          </Pagination>
+      </div>
+			:<div className={'flex h-full justify-center items-center'}>
+				<CardTitle className={'text-2xl'}>Search Jobs</CardTitle>
+				</div>}
 		</Card>
 	)
 }

@@ -11,21 +11,25 @@ export const POST = async (request: Request) => {
 		const {data: {user}}=await supabaseClient.auth.getUser();
 
 		const data = await request.json() as JobSearchParams
+		const { experienceLevel, jobType, workSchedule, ...rest } = data
+		const searchData: Partial<JobSearchParams> = {
+			...rest,
+			...(experienceLevel !== "0" && { experienceLevel }),
+			...(jobType !== "A" && { jobType }),
+			...(workSchedule !== "0" && { workSchedule }),
+		}
 
-		const items = await searchJobsFromApify(data)
+		const items = await searchJobsFromApify(searchData)
 		const itemsWithUserId = items.map((item) => ({...item,user_id:user?.id}))
 
 		const {error} = await supabaseClient
 			.from('user_jobs')
 			.insert(itemsWithUserId)
 		if (error) {
-			console.error(error)
-			return new NextResponse(`error: ${error}`, {status: 500})
+			throw new Error(error.message)
 		}
-
-		return NextResponse.json({status:"success",items:items.length})
+		return NextResponse.json({message:"success",items:items.length})
 	} catch (error) {
-		console.error(error)
-		return NextResponse.json({status:"error"})
+		return NextResponse.json({message:`${error}`}, {status: 500})
 	}
 }

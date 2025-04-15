@@ -9,6 +9,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem, SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { SearxngIcon } from "@/lib/icons";
 
 // Menu items.
 const items = [
@@ -16,6 +17,11 @@ const items = [
 		title: "Dashboard",
 		url: "/dashboard",
 		icon: Home,
+	},
+	{
+		title: "Jobs Search",
+		url: "/search-jobs",
+		icon: SearxngIcon,
 	},
 	{
 		title: "Profile",
