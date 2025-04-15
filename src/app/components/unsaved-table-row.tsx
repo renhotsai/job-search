@@ -20,8 +20,8 @@ import { toast } from "sonner";
 import { updateUserJobFromDB } from "@/lib/orm/query/user-jobs";
 import { Separator } from "@/components/ui/separator";
 
-export const ResultTableRow = ({job}: { job: UserJob }) => {
-
+export const UnsavedTableRow = ({job}: { job: UserJob }) => {
+	console.log(`UnsavedTableRow:${JSON.stringify(job)}`)
 	const [isPending, startTransition] = useTransition()
 	const [summary, setSummary] = useState<string | null>(null)
 	const router = useRouter();
@@ -29,9 +29,10 @@ export const ResultTableRow = ({job}: { job: UserJob }) => {
 	const keepJob = (job: UserJob) => {
 		startTransition(async () => {
 			try {
-				const result = await updateUserJobFromDB(job, UserJobsEnums.SAVED)
+				const jobToUpdate = {...job, status: UserJobsEnums.SAVED}
+				const result = await updateUserJobFromDB(jobToUpdate)
 				toast(dbQueryStatus.success, {
-					description: `Job Saved on ${result.updateDate}`
+					description: `Job Saved on ${result!.updateDate}`
 				})
 				router.refresh();
 			} catch (error) {
@@ -52,21 +53,22 @@ export const ResultTableRow = ({job}: { job: UserJob }) => {
 		setSummary(await result.text())
 	};
 
+
 	return (
 		<Dialog>
 			<TableRow>
 				<TableCell className={'break-words whitespace-normal'}>
-					<DialogTrigger className={'text-left'}>
+					<DialogTrigger className={'text-left w-full'}>
 						{job.companyName}
 					</DialogTrigger>
 				</TableCell>
 				<TableCell className={'break-words whitespace-normal'}>
-					<DialogTrigger className={'text-left'}>
+					<DialogTrigger className={'text-left w-full'}>
 						{job.jobTitle}
 					</DialogTrigger>
 				</TableCell>
 				<TableCell className={'break-words whitespace-normal'}>
-					<DialogTrigger className={'text-left'}>
+					<DialogTrigger className={'text-left w-full'}>
 						{job.location}
 					</DialogTrigger>
 				</TableCell>

@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const userJobs = pgTable('user_jobs', {
 	id: serial("id").primaryKey(),
@@ -19,5 +19,7 @@ export const userJobs = pgTable('user_jobs', {
 	salaryRange: text("salary_range"),
 	timePosted: text("time_posted"),
 	status:integer("status"),
+	resume:boolean("resume").notNull(),
+	coverLetter:boolean("cover_letter").notNull(),
 	updateDate:timestamp('update_date').defaultNow().notNull(),
 });

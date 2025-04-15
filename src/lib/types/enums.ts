@@ -8,7 +8,10 @@ export enum dbQueryStatus {
 export enum UserJobsEnums {
 	UNSAVED = 0,
 	SAVED = 1,
-	APPLIED = 2
+	APPLIED = 2,
+	INTERVIEWING = 3,
+	OFFERED = 4,
+	REJECTED = 5,
 }
 
 

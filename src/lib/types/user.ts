@@ -55,6 +55,8 @@ export interface  UserJob {
 	salaryRange: string | null
 	timePosted: string | null
 	status: UserJobsEnums
+	resume:boolean
+	coverLetter:boolean
 }
 
 
