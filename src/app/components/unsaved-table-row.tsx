@@ -21,7 +21,6 @@ import { updateUserJobFromDB } from "@/lib/orm/query/user-jobs";
 import { Separator } from "@/components/ui/separator";
 
 export const UnsavedTableRow = ({job}: { job: UserJob }) => {
-	console.log(`UnsavedTableRow:${JSON.stringify(job)}`)
 	const [isPending, startTransition] = useTransition()
 	const [summary, setSummary] = useState<string | null>(null)
 	const router = useRouter();

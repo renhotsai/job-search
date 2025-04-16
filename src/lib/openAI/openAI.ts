@@ -1,7 +1,5 @@
 import OpenAI from 'openai';
 
-console.log("OPENAI_API_KEY:", process.env.OPENAI_API_KEY);
-
 const client = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY
 });
@@ -20,6 +18,5 @@ export const summaryJobDescriptionGPT = async (jobDescription: string) => {
 			}
 		],
 	});
-	console.log(`response: ${JSON.stringify(response)}`)
 	return response.choices[0].message.content;
 }

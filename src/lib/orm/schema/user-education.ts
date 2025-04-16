@@ -1,10 +1,10 @@
-import { date, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { date, pgTable, serial, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from 'drizzle-orm';
 import { userProfile } from "@/lib/orm/schema/user-profile";
 
 export const userEducation = pgTable('user_education', {
 	id: serial('id').primaryKey(),
-	userId: text('user_id').notNull(),
+	userId: uuid("user_id").notNull(),
 	school: text('school').notNull(),
 	degree: text('degree').notNull(),
 	fieldOfStudy: text('field_of_study').notNull(),
@@ -16,6 +16,6 @@ export const userEducation = pgTable('user_education', {
 export const userEducationRelations = relations(userEducation, ({one}) => ({
 	user: one(userProfile, {
 		fields: [userEducation.userId],
-		references: [userProfile.id],
+		references: [userProfile.userId],
 	}),
 }));

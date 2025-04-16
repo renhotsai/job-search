@@ -10,7 +10,6 @@ const client = new ApifyClient({
 export const searchJobsFromApify = async (data: Partial<JobSearchParams>) => {
 	try {
 		const snakeData = convertKeysToSnake(data as unknown as Record<string, unknown>)
-		console.log(`snakeData:${JSON.stringify(snakeData)}`)
 
 		const run = await client.actor("JkfTWxtpgfvcRQn3p").call(snakeData);
 

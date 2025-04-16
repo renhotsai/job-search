@@ -4,6 +4,8 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { UserJobsEnums } from "@/lib/types/enums";
 import { updateUserJobFromDB } from "@/lib/orm/query/user-jobs";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export const JobButtons = ({job}: { job: UserJob }) => {
 	const router = useRouter();
@@ -11,23 +13,23 @@ export const JobButtons = ({job}: { job: UserJob }) => {
 	const [isCoverLetterPending, startCoverLetterTransition] = useTransition()
 
 	const resume = () => {
-		startResumeTransition(async () => {
-			if (job.resume) {
-				console.log(`resume already generated`)
-			} else {
-				console.log(`generateResume`)
-				await new Promise((resolve) => {
-					setTimeout(() => {
-						resolve(true)
-					}, 5000)
-				})
 
-				//update user_job
-				const jobToUpdate = {...job, resume: true}
-				updateUserJobFromDB(jobToUpdate).then(() => {
-					console.log(`finished generateResume`)
-				})
+		startResumeTransition(async () => {
+			console.log(`generateResume`)
+			const result = await fetch('/api/resume', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({jobId: job.id}),
+			})
+
+			if (!result.ok) {
+				toast.error("Error generating resume")
+				throw new Error("Error generating resume")
 			}
+			const { url } = await result.json();
+			open(url, '_blank')
 		})
 	}
 

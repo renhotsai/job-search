@@ -14,6 +14,22 @@ export interface UserProfile {
 	updateDate: Date
 }
 
+export interface UserProfileWithRelation {
+	id:number
+	userId: string
+	firstName: string
+	lastName: string
+	email: string
+	phone: string
+	bio: string
+	linkedin: string
+	github: string
+	skills: string[]
+	updateDate: Date
+	educations: UserEducation[]
+	workExperiences: UserWorkExperience[]
+}
+
 export interface UserEducation {
 	id: number
 	userId: string

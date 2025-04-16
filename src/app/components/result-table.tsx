@@ -92,7 +92,6 @@ const ResultTable = ({jobStatus, userJobs}: ResultTableProps) => {
 	}
 
 	if (jobStatus === undefined) {
-		console.log(`Unsaved Table`)
 		return (
 			<div>
 				<Table className="w-full table-fixed">
@@ -131,7 +130,6 @@ const ResultTable = ({jobStatus, userJobs}: ResultTableProps) => {
 	}
 
 	if (paginatedJobs.length === 0) {
-		console.log(`Length === 0`)
 		return (
 			<div className={'flex flex-col gap-5 h-full justify-center items-center'}>
 				<p className={'text-2xl'}>Go Search Jobs</p>
@@ -141,8 +139,6 @@ const ResultTable = ({jobStatus, userJobs}: ResultTableProps) => {
 			</div>
 		)
 	}
-
-	console.log(`Saved Table`)
 	return (
 		<div>
 			<Table className="w-full table-fixed">
